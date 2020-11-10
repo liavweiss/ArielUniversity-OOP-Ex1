@@ -9,7 +9,7 @@ import java.util.HashMap;
 /**
  * This class implements the interface that represents an undirectional weighted graph.
  * It support a large number of nodes (over 10^6, with average degree of 10).
- * @author liav.weiss
+ * @author liav.weiss!!!
  */
 public class WGraph_DS implements weighted_graph{
 
