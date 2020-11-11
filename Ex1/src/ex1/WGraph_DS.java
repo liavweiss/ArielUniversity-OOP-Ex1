@@ -2,6 +2,8 @@ package ex1;
 
 import org.w3c.dom.Node;
 
+import java.io.Externalizable;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -11,7 +13,7 @@ import java.util.HashMap;
  * It support a large number of nodes (over 10^6, with average degree of 10).
  * @author liav.weiss!!!
  */
-public class WGraph_DS implements weighted_graph{
+public class WGraph_DS implements weighted_graph , Serializable {
 
 
     /**
@@ -39,13 +41,15 @@ public class WGraph_DS implements weighted_graph{
          * @object key - Represents the serial number of each node.
          * @object neighbor - Represents the list of neighbors of each node.
          * @object weight - Represents the list of edge's weight of each node with his neighbor.
+         * @object previous - Represents the key of the previous node in the shortest path(help us to to create the path).
          * @object meta_data - Represents the information of each node.
          * @object tag - Represents the tag of each node.
-         * @object placeArray - Represents the place in the destination (in the shortest path) .
+         * @object placeArray - Represents the place of visit array in the shortest path function.
          */
         private int key;
         private HashMap<Integer,node_info> neighbor;
         private HashMap<Integer,Double> weight;
+        private int previousKey;
         private String meta_data;
         private double tag;
         private int placeArray;
@@ -56,10 +60,11 @@ public class WGraph_DS implements weighted_graph{
          */
         public Node(int key){
             this.key=key;
-            this.setTag(-1);
+            this.setTag(Double.MAX_VALUE);
             this.setInfo("white");
             this.weight=new HashMap<Integer, Double>();
             this.neighbor = new HashMap<Integer, node_info>();
+            this.previousKey = -1;
             this.placeArray=-1;
         }
         /** deep copy constructor
@@ -74,6 +79,7 @@ public class WGraph_DS implements weighted_graph{
             this.tag=node.getTag();
             Node n = (Node)node;
             this.placeArray=n.getPlace();
+            this.previousKey = n.getPreviousKey();
         }
 
         /**
@@ -132,15 +138,30 @@ public class WGraph_DS implements weighted_graph{
         }
 
         /**
-         *get the place of the node in the array.
+         *get the key of the previous node(its for the shortest path function)
+         * @return
+         */
+        public int getPreviousKey(){
+            return this.previousKey;
+        }
+
+        /**
+         * A function that allows you to change the key of the previous node(its for the shortest path function).
+         * @param key
+         */
+        public void setPreviousKey(int key){
+            this.previousKey=key;
+        }
+        /**
+         *get the place of the node in the visit array(its for the shortest path function).
          * @return
          */
         public int getPlace(){
             return this.placeArray;
         }
         /**
-         * A function that allows you to change the place in the dit array.
-         * @param place - the new value of the tag
+         * A function that allows you to change the place in the visit array(its for the shortest path function).
+         * @param place
          */
         public void setPlace(int place){
             this.placeArray=place;

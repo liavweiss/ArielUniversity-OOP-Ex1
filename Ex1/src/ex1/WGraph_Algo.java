@@ -1,5 +1,8 @@
 package ex1;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.*;
 
 
@@ -72,6 +75,16 @@ public class WGraph_Algo implements weighted_graph_algorithms{
         return( BFS(this.W_graph) == this.W_graph.nodeSize());
     }
 
+    /**
+     * returns the length of the shortest path between src to dest
+     * we will do it by first check that the input is correct and then send it to the
+     * BFS function, if true we will return the tag of the dest.
+     * and initialize the fields with resetNode function.
+     * Otherwise we will return -1.
+     * @param src - start node
+     * @param dest - end (target) node
+     * @return
+     */
     @Override
     public double shortestPathDist(int src, int dest) {
 
@@ -80,16 +93,45 @@ public class WGraph_Algo implements weighted_graph_algorithms{
         }
         WGraph_DS.Node srcCast = (WGraph_DS.Node)this.W_graph.getNode(src);
         WGraph_DS.Node destCast = (WGraph_DS.Node)this.W_graph.getNode(dest);
-        node_info[] fathers = new node_info[this.W_graph.nodeSize()];
-        if(BFS(fathers, this.W_graph.getNode(src), this.W_graph.getNode(dest))==true){
-            return destCast.getTag();
+        if(BFS(this.W_graph.getNode(src), this.W_graph.getNode(dest))==true){
+            double ans = destCast.getTag();
+            resetNodes(this.W_graph);
+            return ans;
         }
         return-1;
     }
 
+    /**
+     * returns the the shortest path between src to dest - as an ordered List of nodes:
+     * src--> n1-->n2-->...dest
+     * we will do it by First check that the input is correct and then we will send it to
+     * the BFS function, if true we will use the while loop and enter the list according to the field PreviousKey,
+     * in the end we will initialize fields with resetNode function and return the path(null if none).
+     * @param src - start node
+     * @param dest - end (target) node
+     * @return
+     */
     @Override
     public List<node_info> shortestPath(int src, int dest) {
-        return null;
+        if (this.W_graph.getNode(src) == null || this.W_graph.getNode(dest) == null) {
+            return null;
+        }
+        List<node_info> thePath1 = new LinkedList<>();
+        List<node_info> thePath2 = new LinkedList<>();
+        if(BFS(this.W_graph.getNode(src),this.W_graph.getNode(dest))==true) {
+            WGraph_DS.Node srcCast = (WGraph_DS.Node) this.W_graph.getNode(src);
+            WGraph_DS.Node destCast = (WGraph_DS.Node) this.W_graph.getNode(dest);
+            while (destCast.getPreviousKey() != srcCast.getPreviousKey()) {
+                thePath1.add(((WGraph_DS.Node) this.W_graph.getNode(destCast.getPreviousKey())));
+                destCast = (WGraph_DS.Node) this.W_graph.getNode(destCast.getPreviousKey());
+            }
+            for (int i = thePath1.size()-1; i>=0; i--) {
+                thePath2.add(thePath1.get(i));
+            }
+        }
+        resetNodes(this.W_graph);
+        if(thePath2.size()==0) {return null;}
+        return thePath2;
     }
 
     /**
@@ -152,8 +194,22 @@ public class WGraph_Algo implements weighted_graph_algorithms{
 
 
 
-
-    private boolean BFS (node_info[] fathers  , node_info src , node_info dest ) {
+    /**
+     * First we define a counterplace int that will be responsible for the location of each node in the visit array.
+     * we will add to the priority queue the src variable.
+     * We will initialize src.tag to be 0 .
+     * We will perform a loop while as long as the queue is not empty we will perform:
+     * ask if the key of the current father == dest.key , if so
+     * we will breake away from the BFS function.
+     * after that we will run on the neighbors of the same vertex that is in the queue,  update its place on the visit array (with the counterPlace)
+     * We are then asked whether in the Boolean array its value is equal to false and if so we will ask if his tag is greater then his weigt +his father tag and if so we will change his tag to be:his weigt +his father tag.
+     * after that we will change to true the place of the father.
+     * and finaly we will return false
+     * @param  src,dest
+     * @return
+     * run time:O(V+E) v=vertexes , E=edges
+     */
+    private boolean BFS ( node_info src , node_info dest ) {
         boolean[] visit = new boolean[this.W_graph.nodeSize()];
         PriorityQueue<WGraph_DS.Node> QueueOfVertexes = new PriorityQueue<WGraph_DS.Node>();
 
@@ -174,14 +230,58 @@ public class WGraph_Algo implements weighted_graph_algorithms{
                     nodeNextCast.setPlace(counterPlace++);
                 }
                 if(visit[nodeNextCast.getPlace()]==false){
-                    fathers[nodeNextCast.getPlace()]=father;
                     QueueOfVertexes.add(nodeNextCast);
                     if(nodeNextCast.getTag()> this.W_graph.getEdge(fatherCast.getKey(),nodeNextCast.getKey())+fatherCast.getTag())
                     nodeNextCast.setTag(fatherCast.getTag()+this.W_graph.getEdge(fatherCast.getKey(),nodeNextCast.getKey()));
+                    nodeNextCast.setPreviousKey(fatherCast.getKey());
                 }
             }
+            visit[fatherCast.getPlace()]=true;
 
         }
         return false;
+    }
+
+    /**
+     * This function initializes the fields:tag,PreviousKey,Place.
+     * @param W_graph
+     */
+    private void resetNodes(weighted_graph W_graph){
+        for(node_info node : W_graph.getV()){
+            WGraph_DS.Node nodeCast = (WGraph_DS.Node) node;
+            nodeCast.setTag(0.0);
+            nodeCast.setPreviousKey(-1);
+            nodeCast.setPlace(-1);
+        }
+    }
+
+    public static void main(String[] args) {
+        WGraph_Algo wg = new WGraph_Algo();
+        WGraph_DS wg2 = new WGraph_DS();
+        wg2.addNode(0);
+        wg2.addNode(1);
+        wg2.addNode(2);
+        wg2.addNode(3);
+        wg2.addNode(4);
+        wg2.addNode(5);
+        wg2.addNode(6);
+
+       wg2.connect(0,1,2);
+       // wg2.connect(0,2,1);
+        wg2.connect(0,3,2.1);
+        wg2.connect(0,5,2);
+        wg2.connect(5,6,1.444);
+        wg2.connect(6,3,1);
+        wg2.connect(4,1,3);
+
+
+
+
+        wg.init(wg2);
+        System.out.println(wg.isConnected());
+        System.out.println(wg);
+        double d = wg.shortestPathDist(0, 6);
+        System.out.println(wg.shortestPath(0,6));
+        System.out.println(d);
     }
 }
