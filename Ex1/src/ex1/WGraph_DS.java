@@ -295,7 +295,7 @@ public class WGraph_DS implements weighted_graph , Serializable {
             return true;
         }
 
-        /** toString function that string each node with his neighbor.
+        /** toString function that string each node without his neighbor.
          *
          * @return
          */
@@ -404,8 +404,8 @@ public class WGraph_DS implements weighted_graph , Serializable {
 
     /**
      * Connect an edge between node1 and node2, with an edge with weight >=0.
-     * Note: this method should run in O(1) time.
-     * Note2: if the edge node1-node2 already exists - the method simply updates the weight of the edge.
+     * if the edge node1-node2 already exists - the method simply updates the weight of the edge.
+     * run time_O(1).
      */
     @Override
     public void connect(int node1, int node2, double w) {
@@ -452,6 +452,7 @@ public class WGraph_DS implements weighted_graph , Serializable {
     /**
      * Delete the node (with the given ID) from the graph -
      * and removes all edges which starts or ends at this node.
+     * do this by for each loop that acts on this node and removes the edges between its neighbors.
      * @return the data of the removed node (null if none).
      * @param key
      * run time: O(n), |V|=n, as all the edges should be removed.
@@ -478,7 +479,7 @@ public class WGraph_DS implements weighted_graph , Serializable {
     }
 
     /**
-     * Delete the edge from the graph.
+     * Delete the edge between two nodes.
      * @param node1
      * @param node2
      * run time:O(1).
@@ -495,7 +496,8 @@ public class WGraph_DS implements weighted_graph , Serializable {
         this.mc++;
     }
 
-    /** return the number of vertices (nodes) in the graph.
+    /**
+     * return the number of vertices (nodes) in the graph.
      * @return
      * run time:O(1).
      */
@@ -593,5 +595,8 @@ public class WGraph_DS implements weighted_graph , Serializable {
         System.out.println(g);
         System.out.println(g1);
         System.out.println(g.equals(g1));
+        g1.removeNode(5);
+        System.out.println(g.equals(g1));
+
     }
 }

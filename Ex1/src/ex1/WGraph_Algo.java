@@ -269,7 +269,7 @@ public class WGraph_Algo implements weighted_graph_algorithms , Serializable{
      * after that we will run on the neighbors of the same vertex that is in the queue,  update its place on the visit array (with the counterPlace)
      * We are then asked whether in the Boolean array its value is equal to false and if so we will ask if his tag is greater then his weigt +his father tag and if so we will change his tag to be:his weigt +his father tag.
      * after that we will change to true the place of the father.
-     * and finaly we will return false
+     * and finally we will return false
      * @param  src,dest
      * @return
      * run time:O(V+E) v=vertexes , E=edges
