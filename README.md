@@ -13,7 +13,7 @@ In this class we have seven feilds:
 6) tag - Represents the tag of each node.
 7) laceArray - Represents the place of visit array in the shortest path function.
 
-In this class we have two constructors and sixtin functions.
+In this class we have two constructors and sixteen functions.
 #### constructors:
 * defoult- `Node()`
 * copy -  `Node(int key)`
@@ -36,7 +36,7 @@ In this class we have four feilds:
 3) edge_size - Represents the number of edges in the graph.
 4) mc - Represents the number of changes in the graph.
 
-In this class we have two constructors and fourtin functions.
+In this class we have two constructors and fourteen functions.
 #### constructors:
 * `WGraph_DS()` - default constructor.
 * `WGraph_DS (weighted_graph graph)` - a deep copy constructor.
