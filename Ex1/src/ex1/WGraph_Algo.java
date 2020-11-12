@@ -1,8 +1,6 @@
 package ex1;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.*;
 
 
@@ -20,7 +18,7 @@ import java.util.*;
  *
  */
 
-public class WGraph_Algo implements weighted_graph_algorithms{
+public class WGraph_Algo implements weighted_graph_algorithms , Serializable{
 
     /**
      * @object W_graph - Represents the graph.
@@ -142,12 +140,68 @@ public class WGraph_Algo implements weighted_graph_algorithms{
      */
     @Override
     public boolean save(String file) {
-        return false;
+
+        try
+        {
+            //Saving of object in a file
+            FileOutputStream fileName = new FileOutputStream(file);
+            ObjectOutputStream out = new ObjectOutputStream(fileName);
+
+            // Method for serialization of object
+            out.writeObject(this.W_graph);
+
+            out.close();
+            fileName.close();
+
+            System.out.println("Object has been serialized");
+
+        }
+
+        catch(IOException ex)
+        {
+            System.out.println("IOException is caught");
+            return false;
+        }
+        return true;
     }
 
+    /**
+     * This method load a graph to this graph algorithm.
+     * if the file was successfully loaded - the underlying graph
+     * of this class will be changed (to the loaded one), in case the
+     * graph was not loaded the original graph should remain "as is".
+     * @param file - file name
+     * @return true - iff the graph was successfully loaded.
+     */
     @Override
     public boolean load(String file) {
-        return false;
+        try
+        {
+            // Reading the object from a file
+            FileInputStream fileName = new FileInputStream(file);
+            ObjectInputStream in = new ObjectInputStream(fileName);
+
+            // Method for deserialization of object
+            weighted_graph g = (WGraph_DS)in.readObject();
+
+            in.close();
+            fileName.close();
+
+            System.out.println("the W_graph has been deserialized ");
+        }
+
+        catch(IOException ex)
+        {
+            System.out.println("IOException is caught");
+            return false;
+        }
+
+        catch(ClassNotFoundException ex)
+        {
+            System.out.println("ClassNotFoundException is caught");
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -294,5 +348,7 @@ public class WGraph_Algo implements weighted_graph_algorithms{
         double d = wg.shortestPathDist(0, 6);
         System.out.println(wg.shortestPath(0,6));
         System.out.println(d);
+
+
     }
 }
