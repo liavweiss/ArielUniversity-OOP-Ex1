@@ -2,10 +2,12 @@ package ex1;
 
 import org.w3c.dom.Node;
 
+import javax.swing.text.html.HTMLDocument;
 import java.io.Externalizable;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 
 
 /**
@@ -34,7 +36,7 @@ public class WGraph_DS implements weighted_graph , Serializable {
      * @author liav.weiss
      *
      */
-    public class Node implements node_info,Comparable<Node>{
+    public class Node implements node_info,Comparable<Node> {
 
 
         /**
@@ -47,8 +49,8 @@ public class WGraph_DS implements weighted_graph , Serializable {
          * @object placeArray - Represents the place of visit array in the shortest path function.
          */
         private int key;
-        private HashMap<Integer,node_info> neighbor;
-        private HashMap<Integer,Double> weight;
+        private HashMap<Integer, node_info> neighbor;
+        private HashMap<Integer, Double> weight;
         private int previousKey;
         private String meta_data;
         private double tag;
@@ -56,34 +58,38 @@ public class WGraph_DS implements weighted_graph , Serializable {
 
         /**
          * a default constructor.
+         *
          * @param key
          */
-        public Node(int key){
-            this.key=key;
+        public Node(int key) {
+            this.key = key;
             this.setTag(Double.MAX_VALUE);
             this.setInfo("white");
-            this.weight=new HashMap<Integer, Double>();
+            this.weight = new HashMap<Integer, Double>();
             this.neighbor = new HashMap<Integer, node_info>();
             this.previousKey = -1;
-            this.placeArray=-1;
+            this.placeArray = -1;
         }
-        /** deep copy constructor
+
+        /**
+         * deep copy constructor
          *
          * @param node
          */
-        public Node(node_info node){
-            this.key=node.getKey();
-            this.neighbor = new HashMap<Integer,node_info>();
-            this.weight = new HashMap<Integer,Double>();
-            this.meta_data=new String(node.getInfo());
-            this.tag=node.getTag();
-            Node n = (Node)node;
-            this.placeArray=n.getPlace();
+        public Node(node_info node) {
+            this.key = node.getKey();
+            this.neighbor = new HashMap<Integer, node_info>();
+            this.weight = new HashMap<Integer, Double>();
+            this.meta_data = new String(node.getInfo());
+            this.tag = node.getTag();
+            Node n = (Node) node;
+            this.placeArray = n.getPlace();
             this.previousKey = n.getPreviousKey();
         }
 
         /**
          * Return the key (the serial number of this node).
+         *
          * @return
          */
         @Override
@@ -93,6 +99,7 @@ public class WGraph_DS implements weighted_graph , Serializable {
 
         /**
          * return the remark (meta data) associated with this node.
+         *
          * @return
          */
         @Override
@@ -102,15 +109,17 @@ public class WGraph_DS implements weighted_graph , Serializable {
 
         /**
          * A function that allows changing the remark (meta data) associated with this node.
+         *
          * @param s
          */
         @Override
         public void setInfo(String s) {
-            this.meta_data= s;
+            this.meta_data = s;
         }
 
         /**
-         *Temporary data on each node.
+         * Temporary data on each node.
+         *
          * @return
          */
         @Override
@@ -120,52 +129,61 @@ public class WGraph_DS implements weighted_graph , Serializable {
 
         /**
          * A function that allows you to temporarily mark each node.
+         *
          * @param t - the new value of the tag
          */
         @Override
         public void setTag(double t) {
-            this.tag=t;
+            this.tag = t;
         }
 
         /**
          * this function compare two nodes only by their tag.
+         *
          * @param other
          * @return
          */
         @Override
         public int compareTo(Node other) {
-            return Double.compare(this.getTag(),other.getTag());
+            return Double.compare(this.getTag(), other.getTag());
         }
 
         /**
-         *get the key of the previous node(its for the shortest path function)
+         * get the key of the previous node(its for the shortest path function)
+         *
          * @return
          */
-        public int getPreviousKey(){
+        public int getPreviousKey() {
             return this.previousKey;
         }
 
         /**
          * A function that allows you to change the key of the previous node(its for the shortest path function).
+         *
          * @param key
          */
-        public void setPreviousKey(int key){
-            this.previousKey=key;
+        public void setPreviousKey(int key) {
+            this.previousKey = key;
         }
+
         /**
-         *get the place of the node in the visit array(its for the shortest path function).
+         * get the place of the node in the visit array(its for the shortest path function).
+         *
          * @return
          */
-        public int getPlace(){
+        public int getPlace() {
             return this.placeArray;
         }
+
         /**
          * A function that allows you to change the place in the visit array(its for the shortest path function).
+         *
          * @param place
          */
-        public void setPlace(int place){
-            this.placeArray=place;
+        public void setPlace(int place) {
+            this.placeArray = place;
         }
+
         /**
          * This method returns a collection with all the Neighbor nodes of this node_info.
          */
@@ -175,6 +193,7 @@ public class WGraph_DS implements weighted_graph , Serializable {
 
         /**
          * return true if key is on the list of neighbors of this node.
+         *
          * @param key
          * @return
          */
@@ -186,25 +205,94 @@ public class WGraph_DS implements weighted_graph , Serializable {
          * This method adds the node_info (t) to this node_info neighbors.
          * checking if this node==@param t and if not adds it to his neighbors list and add the weight to his weight list.
          */
-        public void addNi( node_info t,double weight) {
-            if(this.key==t.getKey()){return;}
-            this.neighbor.put(t.getKey(),t);
-            this.weight.put(t.getKey(),weight);
+        public void addNi(node_info t, double weight) {
+            if (this.key == t.getKey()) {
+                return;
+            }
+            this.neighbor.put(t.getKey(), t);
+            this.weight.put(t.getKey(), weight);
         }
 
 
         /**
          * Removes the edge this-key,
-         * @param node
-         * checking if this node exist in the neighbor list and remove from the list.
+         *
+         * @param node checking if this node exist in the neighbor list and remove from the list.
          */
         public void removeNode(node_info node) {
-            if(this.neighbor.containsKey(node.getKey())) {
+            if (this.neighbor.containsKey(node.getKey())) {
                 this.neighbor.remove(node.getKey());
-            }
-            else {
+            } else {
                 throw new RuntimeException("this collection does not contains this node");
             }
+        }
+
+        /**
+         * an equals function.
+         * do this with three Auxiliary functions.
+         *
+         * @param obj
+         * @return
+         */
+        @Override
+        public boolean equals(Object obj) {
+            node_info node = (node_info) obj;
+            Node nodeCast = (Node) node;
+            return (this.equal1(node) && this.equalNeighbor(nodeCast.neighbor) && this.equalWeight(nodeCast.weight));
+        }
+
+        /**
+         * this function checks if all the regular fields are the same.
+         *
+         * @param node
+         * @return
+         */
+        private boolean equal1(node_info node) {
+            Node nodeCast = (Node) node;
+            return (this.getKey() == nodeCast.getKey() && this.getTag() == nodeCast.getTag() && this.getInfo().equals(nodeCast.getInfo()));
+        }
+
+        /**
+         * this function checks if two hashMap of Integer and node_data are the same.
+         * run on two iterators and asked if all the fields are equals.
+         *
+         * @param nodeNeighbor
+         * @return
+         */
+        private boolean equalNeighbor(HashMap<Integer, node_info> nodeNeighbor) {
+
+            Collection<node_info> this_Neighbor = this.neighbor.values();
+            Collection<node_info> node_Neighbor = nodeNeighbor.values();
+            Iterator<node_info> this_Neighbor_Ite = this_Neighbor.iterator();
+            Iterator<node_info> node_Neighbor_Ite = node_Neighbor.iterator();
+            while (this_Neighbor_Ite.hasNext() && node_Neighbor_Ite.hasNext()) {
+                Node nodeCast1 = (Node) this_Neighbor_Ite.next();
+                Node nodeCast2 = (Node) node_Neighbor_Ite.next();
+                if (!nodeCast1.equal1(nodeCast2)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        /**
+         * this function checks if two hashMap of Integer and Double are the same.
+         * run on two iterators and asked if all the fields are equals.
+         * @param nodeWeight
+         * @return
+         */
+        private boolean equalWeight(HashMap<Integer,Double> nodeWeight){
+
+            Collection<Double> node1Weight = this.weight.values();
+            Collection<Double> node2Weight = nodeWeight.values();
+            Iterator<Double> node1Weight_Ite = node1Weight.iterator();
+            Iterator<Double> node2Weight_Ite = node2Weight.iterator();
+                  while(node1Weight_Ite.hasNext() && node2Weight_Ite.hasNext()){
+                      double weight1 = node1Weight_Ite.next();
+                      double weight2 = node2Weight_Ite.next();
+                      if(weight1!=weight2) {return false;}
+                  }
+            return true;
         }
 
         /** toString function that string each node with his neighbor.
@@ -435,6 +523,29 @@ public class WGraph_DS implements weighted_graph , Serializable {
         return this.mc;
     }
 
+    /**
+     * an equals function , do this with two iterator that run on the vertexes of the graph
+     * and inside asked if its the same node in both graph with
+     * Node equals function.
+     * @param obj
+     * @return
+     */
+    @Override
+    public boolean equals(Object obj){
+        weighted_graph graph = (weighted_graph) obj;
+        if(this.node_size!=graph.nodeSize() || this.edge_size!= graph.edgeSize()) {return false;}
+        Collection<node_info> this_W_graph = this.getV();
+        Collection<node_info> graph_W_graph = graph.getV();
+        Iterator<node_info> this_W_graph_Ite = this_W_graph.iterator();
+        Iterator<node_info> graph_W_graph_Ite = graph_W_graph.iterator();
+              while(this_W_graph_Ite.hasNext() && graph_W_graph_Ite.hasNext()){
+                  Node vertex1 = (Node) this_W_graph_Ite.next();
+                  Node vertex2 = (Node) graph_W_graph_Ite.next();
+                  if(!vertex1.equals(vertex2)) {return false;}
+              }
+
+        return true;
+    }
     /** toString function that string each node with his neighbor.
      *
      * @return
@@ -478,5 +589,9 @@ public class WGraph_DS implements weighted_graph , Serializable {
         System.out.println(g);
         g.removeEdge(2,3);
         System.out.println(g);
+        WGraph_DS g1 = new WGraph_DS(g);
+        System.out.println(g);
+        System.out.println(g1);
+        System.out.println(g.equals(g1));
     }
 }

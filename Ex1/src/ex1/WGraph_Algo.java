@@ -150,6 +150,17 @@ public class WGraph_Algo implements weighted_graph_algorithms{
         return false;
     }
 
+    /**
+     * an equals function.
+     * do this with equals function on WGraph_DS class.
+     * @param obj
+     * @return
+     */
+    @Override
+    public boolean equals(Object obj) {
+        WGraph_DS graph = (WGraph_DS)obj;
+       return this.equals(obj);
+    }
 
     /**
      * First we get the first vertex of the graph and build a queue of type node_info We will initialize
