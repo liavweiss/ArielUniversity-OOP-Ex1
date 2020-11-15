@@ -13,9 +13,10 @@ import java.util.Iterator;
 /**
  * This class implements the interface that represents an undirectional weighted graph.
  * It support a large number of nodes (over 10^6, with average degree of 10).
+ *
  * @author liav.weiss!!!
  */
-public class WGraph_DS implements weighted_graph , Serializable {
+public class WGraph_DS implements weighted_graph, Serializable {
 
 
     /**
@@ -33,10 +34,10 @@ public class WGraph_DS implements weighted_graph , Serializable {
     /**
      * This class implements the interface that represents the set of operations applicable on a
      * node (vertex) in an weighted graph.
-     * @author liav.weiss
      *
+     * @author liav.weiss
      */
-    public class Node implements node_info,Comparable<Node> {
+    public class Node implements node_info, Comparable<Node> {
 
 
         /**
@@ -222,6 +223,7 @@ public class WGraph_DS implements weighted_graph , Serializable {
         public void removeNode(node_info node) {
             if (this.neighbor.containsKey(node.getKey())) {
                 this.neighbor.remove(node.getKey());
+                this.weight.remove(node.getKey());
             } else {
                 throw new RuntimeException("this collection does not contains this node");
             }
@@ -278,35 +280,39 @@ public class WGraph_DS implements weighted_graph , Serializable {
         /**
          * this function checks if two hashMap of Integer and Double are the same.
          * run on two iterators and asked if all the fields are equals.
+         *
          * @param nodeWeight
          * @return
          */
-        private boolean equalWeight(HashMap<Integer,Double> nodeWeight){
+        private boolean equalWeight(HashMap<Integer, Double> nodeWeight) {
 
             Collection<Double> node1Weight = this.weight.values();
             Collection<Double> node2Weight = nodeWeight.values();
             Iterator<Double> node1Weight_Ite = node1Weight.iterator();
             Iterator<Double> node2Weight_Ite = node2Weight.iterator();
-                  while(node1Weight_Ite.hasNext() && node2Weight_Ite.hasNext()){
-                      double weight1 = node1Weight_Ite.next();
-                      double weight2 = node2Weight_Ite.next();
-                      if(weight1!=weight2) {return false;}
-                  }
+            while (node1Weight_Ite.hasNext() && node2Weight_Ite.hasNext()) {
+                double weight1 = node1Weight_Ite.next();
+                double weight2 = node2Weight_Ite.next();
+                if (weight1 != weight2) {
+                    return false;
+                }
+            }
             return true;
         }
 
-        /** toString function that string each node without his neighbor.
+        /**
+         * toString function that string each node without his neighbor.
          *
          * @return
          */
         @Override
         public String toString() {
-            String s ="";
-            s+= "NodeData{" +
+            String s = "";
+            s += "NodeData{" +
                     "key=" + this.key +
                     ", meta_data='" + this.meta_data + '\'' +
                     ", tag=" + this.tag;
-            s+= '}';
+            s += '}';
             return s;
         }
 
@@ -316,88 +322,95 @@ public class WGraph_DS implements weighted_graph , Serializable {
     /**
      * default constructor.
      */
-    public WGraph_DS(){
-        this.W_graph=new HashMap<Integer, node_info>();
-        this.node_size=0;
-        this.edge_size=0;
+    public WGraph_DS() {
+        this.W_graph = new HashMap<Integer, node_info>();
+        this.node_size = 0;
+        this.edge_size = 0;
     }
 
     /**
      * a deep copy constructor.
+     *
      * @param graph
      */
-    public WGraph_DS (weighted_graph graph){
-        this.W_graph=new HashMap<Integer,node_info>();
+    public WGraph_DS(weighted_graph graph) {
+        this.W_graph = new HashMap<Integer, node_info>();
 
-        for(node_info node : graph.getV()){
+        for (node_info node : graph.getV()) {
             node_info n1 = (Node) node;
-            this.W_graph.put(node.getKey(),new Node(n1));
+            this.W_graph.put(node.getKey(), new Node(n1));
         }
         Collection<node_info> theVertex = graph.getV();
-        for(node_info node:theVertex){
+        for (node_info node : theVertex) {
             node_info n1 = (Node) node;
             Collection<node_info> theNeighbor = graph.getV(node.getKey());
-            for(node_info neighbor : theNeighbor){
+            for (node_info neighbor : theNeighbor) {
                 Node neighbor1 = (Node) node;
-                this.connect(n1.getKey(),neighbor1.getKey(),getEdge(n1.getKey(),neighbor1.getKey()));
+                this.connect(n1.getKey(), neighbor1.getKey(), getEdge(n1.getKey(), neighbor1.getKey()));
             }
         }
-        this.node_size=graph.nodeSize();
-        this.edge_size=graph.edgeSize();
+        this.node_size = graph.nodeSize();
+        this.edge_size = graph.edgeSize();
     }
-
 
 
     /**
      * return the node_info by the node_id,
+     *
      * @param key - the node_id
      * @return the node_data by the node_id, null if none.
      */
     @Override
     public node_info getNode(int key) {
-        if(W_graph.containsKey(key)) { return W_graph.get(key);}
+        if (W_graph.containsKey(key)) {
+            return W_graph.get(key);
+        }
         return null;
     }
 
     /**
      * return true if and only if there is an edge between node1 and node2.
+     *
      * @param node1
      * @param node2
-     * @return
-     * run time:O(1).
+     * @return run time:O(1).
      */
     @Override
     public boolean hasEdge(int node1, int node2) {
-       Node n1 =(Node)getNode(node1);
-       return n1.hasNi(node2);
+        Node n1 = (Node) getNode(node1);
+        return n1.hasNi(node2);
     }
 
     /**
-     * return the weight if the edge (node1, node1). In case
+     * return the weight if the edge (node1, node1) exist. In case
      * there is no such edge return -1.
+     *
      * @param node1
      * @param node2
-     * @return
-     * run time:O(1).
+     * @return run time:O(1).
      */
     @Override
     public double getEdge(int node1, int node2) {
-        if(!hasEdge(node1,node2)) {return -1;}
-        Node n1 =(Node)getNode(node1);
-        return n1.weight.get(node2);
+        if (hasEdge(node1, node2)) {
+            Node n1 = (Node) getNode(node1);
+            return n1.weight.get(node2);
+        }
+        return -1;
     }
 
     /**
      * add a new node to the graph with the given key.
      * if there is already a node with such a key -> no action should be performed.
-     * @param key
-     * run time:O(1).
+     *
+     * @param key run time:O(1).
      */
     @Override
     public void addNode(int key) {
-        if(W_graph.containsKey(key)) {return;}
-        Node n1 =(Node)new Node(key);
-        this.W_graph.put(key,n1);
+        if (W_graph.containsKey(key)) {
+            return;
+        }
+        Node n1 = (Node) new Node(key);
+        this.W_graph.put(key, n1);
         node_size++;
         mc++;
     }
@@ -409,15 +422,19 @@ public class WGraph_DS implements weighted_graph , Serializable {
      */
     @Override
     public void connect(int node1, int node2, double w) {
-        if(w<0) { throw new RuntimeException("the weight must be a positive number");}
-            Node n1 = (Node) getNode(node1);
-            Node n2 = (Node) getNode(node2);
-        if(node1!=node2) {
-            if (hasEdge(node1, node2)) {
+        if (w < 0) {
+            throw new RuntimeException("the weight must be a positive number");
+        }
+        Node n1 = (Node) getNode(node1);
+        Node n2 = (Node) getNode(node2);
+        if (n1 == null || n2 == null) {
+            return;
+        }
+        else if (node1 != node2 && hasEdge(node1, node2) && getEdge(node1, node2) != w) {
                 n1.weight.put(node2, w);
                 n2.weight.put(node1, w);
                 mc++;
-            }
+        } else if(!hasEdge(node1, node2)) {
             n1.addNi(n2, w);
             n2.addNi(n1, w);
             mc++;
@@ -425,9 +442,11 @@ public class WGraph_DS implements weighted_graph , Serializable {
         }
     }
 
+
     /**
      * This method return a pointer (shallow copy) for a
      * Collection representing all the nodes in the graph.
+     *
      * @return Collection<node_data>
      * run time:O(1).
      */
@@ -437,9 +456,9 @@ public class WGraph_DS implements weighted_graph , Serializable {
     }
 
     /**
-     *
      * This method returns a Collection containing all the
      * nodes connected to node_id
+     *
      * @return Collection<node_data>
      * run time: O(k) , k - being the degree of node_id.
      */
@@ -453,20 +472,21 @@ public class WGraph_DS implements weighted_graph , Serializable {
      * Delete the node (with the given ID) from the graph -
      * and removes all edges which starts or ends at this node.
      * do this by for each loop that acts on this node and removes the edges between its neighbors.
+     *
+     * @param key run time: O(n), |V|=n, as all the edges should be removed.
      * @return the data of the removed node (null if none).
-     * @param key
-     * run time: O(n), |V|=n, as all the edges should be removed.
      */
     @Override
     public node_info removeNode(int key) {
-        if(!this.W_graph.containsKey(key)){
+        if (!this.W_graph.containsKey(key)) {
             return null;
         }
-        node_info n1=getNode(key);
+        node_info n1 = getNode(key);
         Node N1 = (Node) getNode(key);
         if (!N1.getNi().isEmpty()) {
             for (node_info n : N1.getNi()) {
-                Node N2 =(Node) n;
+                Node N2 = (Node) n;
+                removeEdge(N2.getKey(), N1.getKey());
                 N2.removeNode(n1);
                 this.edge_size--;
                 this.mc++;
@@ -480,13 +500,15 @@ public class WGraph_DS implements weighted_graph , Serializable {
 
     /**
      * Delete the edge between two nodes.
+     *
      * @param node1
-     * @param node2
-     * run time:O(1).
+     * @param node2 run time:O(1).
      */
     @Override
     public void removeEdge(int node1, int node2) {
-        if(!hasEdge(node1, node2)) {return;}
+        if (!hasEdge(node1, node2)) {
+            return;
+        }
         Node n1 = (Node) getNode(node1);
         Node n2 = (Node) getNode(node2);
         n1.removeNode(n2);
@@ -498,8 +520,8 @@ public class WGraph_DS implements weighted_graph , Serializable {
 
     /**
      * return the number of vertices (nodes) in the graph.
-     * @return
-     * run time:O(1).
+     *
+     * @return run time:O(1).
      */
     @Override
     public int nodeSize() {
@@ -508,8 +530,8 @@ public class WGraph_DS implements weighted_graph , Serializable {
 
     /**
      * return the number of edges (undirectional graph).
-     * @return
-     * run time:O(1).
+     *
+     * @return run time:O(1).
      */
     @Override
     public int edgeSize() {
@@ -518,6 +540,7 @@ public class WGraph_DS implements weighted_graph , Serializable {
 
     /**
      * return the Mode Count - for testing changes in the graph.
+     *
      * @return
      */
     @Override
@@ -529,45 +552,52 @@ public class WGraph_DS implements weighted_graph , Serializable {
      * an equals function , do this with two iterator that run on the vertexes of the graph
      * and inside asked if its the same node in both graph with
      * Node equals function.
+     *
      * @param obj
      * @return
      */
     @Override
-    public boolean equals(Object obj){
+    public boolean equals(Object obj) {
         weighted_graph graph = (weighted_graph) obj;
-        if(this.node_size!=graph.nodeSize() || this.edge_size!= graph.edgeSize()) {return false;}
+        if (this.node_size != graph.nodeSize() || this.edge_size != graph.edgeSize()) {
+            return false;
+        }
         Collection<node_info> this_W_graph = this.getV();
         Collection<node_info> graph_W_graph = graph.getV();
         Iterator<node_info> this_W_graph_Ite = this_W_graph.iterator();
         Iterator<node_info> graph_W_graph_Ite = graph_W_graph.iterator();
-              while(this_W_graph_Ite.hasNext() && graph_W_graph_Ite.hasNext()){
-                  Node vertex1 = (Node) this_W_graph_Ite.next();
-                  Node vertex2 = (Node) graph_W_graph_Ite.next();
-                  if(!vertex1.equals(vertex2)) {return false;}
-              }
+        while (this_W_graph_Ite.hasNext() && graph_W_graph_Ite.hasNext()) {
+            Node vertex1 = (Node) this_W_graph_Ite.next();
+            Node vertex2 = (Node) graph_W_graph_Ite.next();
+            if (!vertex1.equals(vertex2)) {
+                return false;
+            }
+        }
 
         return true;
     }
-    /** toString function that string each node with his neighbor.
+
+    /**
+     * toString function that string each node with his neighbor.
      *
      * @return
      */
     @Override
     public String toString() {
-        String s ="";
-        for(node_info n : getV()) {
-            int counter=1;
+        String s = "";
+        for (node_info n : getV()) {
+            int counter = 1;
             Node n1 = (Node) n;
-           s+= "NodeData{" +
+            s += "NodeData{" +
                     "key=" + n1.key +
                     ", meta_data='" + n1.meta_data +
                     ", tag=" + n1.tag;
-            for(node_info neighbor : n1.getNi())
-            s += "{ neighbor" +counter++
-                   + ":key=" + neighbor.getKey() +
-                    ", meta_data='" + neighbor.getInfo() +
-                    ", tag=" + neighbor.getTag()+
-                    ", weight:"+getEdge(n1.getKey(),neighbor.getKey());
+            for (node_info neighbor : n1.getNi())
+                s += "{ neighbor" + counter++
+                        + ":key=" + neighbor.getKey() +
+                        ", meta_data='" + neighbor.getInfo() +
+                        ", tag=" + neighbor.getTag() +
+                        ", weight:" + getEdge(n1.getKey(), neighbor.getKey());
             s += '}';
         }
         return s;
@@ -581,15 +611,15 @@ public class WGraph_DS implements weighted_graph , Serializable {
         g.addNode(3);
         g.addNode(4);
         g.addNode(5);
-        g.connect(1,2,2);
-        g.connect(1,3,2);
-        g.connect(1,4,2);
-        g.connect(1,5,2);
-        g.connect(2,3,2);
+        g.connect(1, 2, 2);
+        g.connect(1, 3, 2);
+        g.connect(1, 4, 2);
+        g.connect(1, 5, 2);
+        g.connect(2, 3, 2);
         System.out.println(g);
         g.removeNode(1);
         System.out.println(g);
-        g.removeEdge(2,3);
+        g.removeEdge(2, 3);
         System.out.println(g);
         WGraph_DS g1 = new WGraph_DS(g);
         System.out.println(g);
