@@ -1,9 +1,6 @@
 package ex1;
 
-import org.w3c.dom.Node;
 
-import javax.swing.text.html.HTMLDocument;
-import java.io.Externalizable;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
@@ -20,10 +17,10 @@ public class WGraph_DS implements weighted_graph, Serializable {
 
 
     /**
-     * @object graph - Represents the list of node_info (the vertexes).
-     * @object node_size - Represents the number of nodes in the graph.
-     * @object edge_size - Represents the number of edges in the graph.
-     * @object mc - Represents the number of changes in the graph.
+     * graph - Represents the list of node_info (the vertexes).
+     * node_size - Represents the number of nodes in the graph.
+     * edge_size - Represents the number of edges in the graph.
+     * mc - Represents the number of changes in the graph.
      */
     private HashMap<Integer, node_info> W_graph;
     private int node_size;
@@ -41,13 +38,13 @@ public class WGraph_DS implements weighted_graph, Serializable {
 
 
         /**
-         * @object key - Represents the serial number of each node.
-         * @object neighbor - Represents the list of neighbors of each node.
-         * @object weight - Represents the list of edge's weight of each node with his neighbor.
-         * @object previous - Represents the key of the previous node in the shortest path(help us to to create the path).
-         * @object meta_data - Represents the information of each node.
-         * @object tag - Represents the tag of each node.
-         * @object placeArray - Represents the place of visit array in the shortest path function.
+         * key - Represents the serial number of each node.
+         * neighbor - Represents the list of neighbors of each node.
+         * weight - Represents the list of edge's weight of each node with his neighbor.
+         * previous - Represents the key of the previous node in the shortest path(help us to to create the path).
+         * meta_data - Represents the information of each node.
+         * tag - Represents the tag of each node.
+         * placeArray - Represents the place of visit array in the shortest path function.
          */
         private int key;
         private HashMap<Integer, node_info> neighbor;
@@ -66,8 +63,8 @@ public class WGraph_DS implements weighted_graph, Serializable {
             this.key = key;
             this.setTag(Double.MAX_VALUE);
             this.setInfo("white");
-            this.weight = new HashMap<Integer, Double>();
-            this.neighbor = new HashMap<Integer, node_info>();
+            this.weight = new HashMap<>();
+            this.neighbor = new HashMap<>();
             this.previousKey = -1;
             this.placeArray = -1;
         }
@@ -217,16 +214,16 @@ public class WGraph_DS implements weighted_graph, Serializable {
 
         /**
          * Removes the edge this-key,
+         * checking if this node exist in the neighbor list and remove from the list.
          *
-         * @param node checking if this node exist in the neighbor list and remove from the list.
+         * @param node
          */
         public void removeNode(node_info node) {
-            if (this.neighbor.containsKey(node.getKey())) {
-                this.neighbor.remove(node.getKey());
-                this.weight.remove(node.getKey());
-            } else {
-                throw new RuntimeException("this collection does not contains this node");
+            if (!this.neighbor.containsKey(node.getKey())) {
+                return;
             }
+            this.neighbor.remove(node.getKey());
+            this.weight.remove(node.getKey());
         }
 
         /**
@@ -262,17 +259,19 @@ public class WGraph_DS implements weighted_graph, Serializable {
          * @return
          */
         private boolean equalNeighbor(HashMap<Integer, node_info> nodeNeighbor) {
-
+            boolean flag = false;
             Collection<node_info> this_Neighbor = this.neighbor.values();
             Collection<node_info> node_Neighbor = nodeNeighbor.values();
             Iterator<node_info> this_Neighbor_Ite = this_Neighbor.iterator();
-            Iterator<node_info> node_Neighbor_Ite = node_Neighbor.iterator();
-            while (this_Neighbor_Ite.hasNext() && node_Neighbor_Ite.hasNext()) {
+            // Iterator<node_info> node_Neighbor_Ite = node_Neighbor.iterator();
+            while (this_Neighbor_Ite.hasNext()) {
                 Node nodeCast1 = (Node) this_Neighbor_Ite.next();
-                Node nodeCast2 = (Node) node_Neighbor_Ite.next();
-                if (!nodeCast1.equal1(nodeCast2)) {
-                    return false;
+                for (node_info nodeNi : node_Neighbor) {
+                    if (nodeCast1.equal1(nodeNi)) {
+                        flag = true;
+                    }
                 }
+                if(flag==false) {return false;}
             }
             return true;
         }
@@ -343,10 +342,10 @@ public class WGraph_DS implements weighted_graph, Serializable {
         Collection<node_info> theVertex = graph.getV();
         for (node_info node : theVertex) {
             node_info n1 = (Node) node;
-            Collection<node_info> theNeighbor = graph.getV(node.getKey());
+            Collection<node_info> theNeighbor = graph.getV(n1.getKey());
             for (node_info neighbor : theNeighbor) {
-                Node neighbor1 = (Node) node;
-                this.connect(n1.getKey(), neighbor1.getKey(), getEdge(n1.getKey(), neighbor1.getKey()));
+                Node neighbor1 = (Node) neighbor;
+                connect(n1.getKey(), neighbor1.getKey(), graph.getEdge(n1.getKey(), neighbor1.getKey()));
             }
         }
         this.node_size = graph.nodeSize();
@@ -377,6 +376,9 @@ public class WGraph_DS implements weighted_graph, Serializable {
      */
     @Override
     public boolean hasEdge(int node1, int node2) {
+        if (node1 == node2) {
+            return false;
+        }
         Node n1 = (Node) getNode(node1);
         return n1.hasNi(node2);
     }
@@ -429,12 +431,11 @@ public class WGraph_DS implements weighted_graph, Serializable {
         Node n2 = (Node) getNode(node2);
         if (n1 == null || n2 == null) {
             return;
-        }
-        else if (node1 != node2 && hasEdge(node1, node2) && getEdge(node1, node2) != w) {
-                n1.weight.put(node2, w);
-                n2.weight.put(node1, w);
-                mc++;
-        } else if(!hasEdge(node1, node2)) {
+        } else if (node1 != node2 && hasEdge(node1, node2) && getEdge(node1, node2) != w) {
+            n1.weight.put(node2, w);
+            n2.weight.put(node1, w);
+            mc++;
+        } else if (!hasEdge(node1, node2) && node1 != node2) {
             n1.addNi(n2, w);
             n2.addNi(n1, w);
             mc++;
@@ -486,8 +487,7 @@ public class WGraph_DS implements weighted_graph, Serializable {
         if (!N1.getNi().isEmpty()) {
             for (node_info n : N1.getNi()) {
                 Node N2 = (Node) n;
-                removeEdge(N2.getKey(), N1.getKey());
-                N2.removeNode(n1);
+                N2.removeNode(N1);
                 this.edge_size--;
                 this.mc++;
             }
@@ -611,22 +611,21 @@ public class WGraph_DS implements weighted_graph, Serializable {
         g.addNode(3);
         g.addNode(4);
         g.addNode(5);
-        g.connect(1, 2, 2);
+        g.addNode(1);
+
+
         g.connect(1, 3, 2);
-        g.connect(1, 4, 2);
-        g.connect(1, 5, 2);
-        g.connect(2, 3, 2);
-        System.out.println(g);
-        g.removeNode(1);
-        System.out.println(g);
-        g.removeEdge(2, 3);
-        System.out.println(g);
+        g.connect(1, 3, 4);
+        g.connect(1, 6, 5);
+        g.connect(1, 1, 3);
         WGraph_DS g1 = new WGraph_DS(g);
+        System.out.println(g.equals(g1));
+        System.out.println(g.hasEdge(1, 3));
+        System.out.println(g.hasEdge(1, 1));
+        System.out.println(g.hasEdge(1, 6));
+        System.out.println(g.hasEdge(1, 2));
         System.out.println(g);
-        System.out.println(g1);
-        System.out.println(g.equals(g1));
-        g1.removeNode(5);
-        System.out.println(g.equals(g1));
+
 
     }
 }

@@ -15,10 +15,9 @@ import java.util.*;
  * 6. Load(file);
  *
  * @author liav.weiss
- *
  */
 
-public class WGraph_Algo implements weighted_graph_algorithms , Serializable{
+public class WGraph_Algo implements weighted_graph_algorithms, Serializable {
 
     /**
      * @object W_graph - Represents the graph.
@@ -28,21 +27,23 @@ public class WGraph_Algo implements weighted_graph_algorithms , Serializable{
     /**
      * default constructor.
      */
-    public WGraph_Algo(){
-        this.W_graph=new WGraph_DS();
+    public WGraph_Algo() {
+        this.W_graph = new WGraph_DS();
     }
 
     /**
      * Init the graph on which this set of algorithms will operate .
+     *
      * @param g
      */
     @Override
     public void init(weighted_graph g) {
-            this.W_graph=g;
+        this.W_graph = g;
     }
 
     /**
      * Return the underlying graph of which this class works.
+     *
      * @return
      */
     @Override
@@ -50,13 +51,15 @@ public class WGraph_Algo implements weighted_graph_algorithms , Serializable{
         return this.W_graph;
     }
 
-    /** deep copy constructor.
+    /**
+     * deep copy constructor.
      * Implemented by a copy function in Node and WGraph_DS classes.
+     *
      * @return
      */
     @Override
     public weighted_graph copy() {
-        this.W_graph=new WGraph_DS(this.W_graph);
+        this.W_graph = new WGraph_DS(this.W_graph);
         return this.W_graph;
     }
 
@@ -64,13 +67,18 @@ public class WGraph_Algo implements weighted_graph_algorithms , Serializable{
      * Returns true if and only if there is a valid path from every node to each other node.
      * Do it by checking if BFS function return the number of nodes in this graph.
      * (An explanation of BFS is given in the function itself).
+     *
      * @return
      */
     @Override
     public boolean isConnected() {
-        if(this.W_graph==null){return false;}
-        if(this.W_graph.nodeSize()==0||this.W_graph.nodeSize()==1) {return true;}
-        return( BFS(this.W_graph) == this.W_graph.nodeSize());
+        if (this.W_graph == null) {
+            return false;
+        }
+        if (this.W_graph.nodeSize() == 0 || this.W_graph.nodeSize() == 1) {
+            return true;
+        }
+        return (BFS(this.W_graph) == this.W_graph.nodeSize());
     }
 
     /**
@@ -79,7 +87,8 @@ public class WGraph_Algo implements weighted_graph_algorithms , Serializable{
      * BFS function, if true we will return the tag of the dest.
      * and initialize the fields with resetNode function.
      * Otherwise we will return -1.
-     * @param src - start node
+     *
+     * @param src  - start node
      * @param dest - end (target) node
      * @return
      */
@@ -89,14 +98,14 @@ public class WGraph_Algo implements weighted_graph_algorithms , Serializable{
         if (this.W_graph.getNode(src) == null || this.W_graph.getNode(dest) == null) {
             return -1.0;
         }
-        WGraph_DS.Node srcCast = (WGraph_DS.Node)this.W_graph.getNode(src);
-        WGraph_DS.Node destCast = (WGraph_DS.Node)this.W_graph.getNode(dest);
-        if(BFS(this.W_graph.getNode(src), this.W_graph.getNode(dest))==true){
+        WGraph_DS.Node srcCast = (WGraph_DS.Node) this.W_graph.getNode(src);
+        WGraph_DS.Node destCast = (WGraph_DS.Node) this.W_graph.getNode(dest);
+        if (BFS(this.W_graph.getNode(src), this.W_graph.getNode(dest)) == true) {
             double ans = destCast.getTag();
             resetNodes(this.W_graph);
             return ans;
         }
-        return-1;
+        return -1;
     }
 
     /**
@@ -105,7 +114,8 @@ public class WGraph_Algo implements weighted_graph_algorithms , Serializable{
      * we will do it by First check that the input is correct and then we will send it to
      * the BFS function, if true we will use the while loop and enter the list according to the field PreviousKey,
      * in the end we will initialize fields with resetNode function and return the path(null if none).
-     * @param src - start node
+     *
+     * @param src  - start node
      * @param dest - end (target) node
      * @return
      */
@@ -116,33 +126,34 @@ public class WGraph_Algo implements weighted_graph_algorithms , Serializable{
         }
         List<node_info> thePath1 = new LinkedList<>();
         List<node_info> thePath2 = new LinkedList<>();
-        if(BFS(this.W_graph.getNode(src),this.W_graph.getNode(dest))==true) {
+        if (BFS(this.W_graph.getNode(src), this.W_graph.getNode(dest)) == true) {
             WGraph_DS.Node srcCast = (WGraph_DS.Node) this.W_graph.getNode(src);
             WGraph_DS.Node destCast = (WGraph_DS.Node) this.W_graph.getNode(dest);
             while (destCast.getPreviousKey() != srcCast.getPreviousKey()) {
                 thePath1.add(((WGraph_DS.Node) this.W_graph.getNode(destCast.getPreviousKey())));
                 destCast = (WGraph_DS.Node) this.W_graph.getNode(destCast.getPreviousKey());
             }
-            for (int i = thePath1.size()-1; i>=0; i--) {
+            for (int i = thePath1.size() - 1; i >= 0; i--) {
                 thePath2.add(thePath1.get(i));
             }
         }
         resetNodes(this.W_graph);
-        if(thePath2.size()==0) {return null;}
+        if (thePath2.size() == 0) {
+            return null;
+        }
         return thePath2;
     }
 
     /**
      * Saves this weighted (undirected) graph to the given
      * file name
+     *
      * @param file - the file name (may include a relative path).
      * @return true - iff the file was successfully saved
      */
     @Override
     public boolean save(String file) {
-
-        try
-        {
+        try {
             //Saving of object in a file
             FileOutputStream fileName = new FileOutputStream(file);
             ObjectOutputStream out = new ObjectOutputStream(fileName);
@@ -154,15 +165,11 @@ public class WGraph_Algo implements weighted_graph_algorithms , Serializable{
             fileName.close();
 
             System.out.println("Object has been serialized");
-
-        }
-
-        catch(IOException ex)
-        {
+            return true;
+        } catch (IOException ex) {
             System.out.println("IOException is caught");
             return false;
         }
-        return true;
     }
 
     /**
@@ -170,50 +177,46 @@ public class WGraph_Algo implements weighted_graph_algorithms , Serializable{
      * if the file was successfully loaded - the underlying graph
      * of this class will be changed (to the loaded one), in case the
      * graph was not loaded the original graph should remain "as is".
+     *
      * @param file - file name
      * @return true - iff the graph was successfully loaded.
      */
     @Override
     public boolean load(String file) {
-        try
-        {
+        try {
             // Reading the object from a file
             FileInputStream fileName = new FileInputStream(file);
             ObjectInputStream in = new ObjectInputStream(fileName);
 
             // Method for deserialization of object
-            weighted_graph g = (WGraph_DS)in.readObject();
+            weighted_graph g = (WGraph_DS) in.readObject();
+            this.init(g);
 
             in.close();
             fileName.close();
 
             System.out.println("the W_graph has been deserialized ");
-        }
-
-        catch(IOException ex)
-        {
+            return true;
+        } catch (IOException ex) {
             System.out.println("IOException is caught");
             return false;
-        }
-
-        catch(ClassNotFoundException ex)
-        {
+        } catch (ClassNotFoundException ex) {
             System.out.println("ClassNotFoundException is caught");
             return false;
         }
-        return true;
     }
 
     /**
      * an equals function.
      * do this with equals function on WGraph_DS class.
+     *
      * @param obj
      * @return
      */
     @Override
     public boolean equals(Object obj) {
-        WGraph_DS graph = (WGraph_DS)obj;
-       return this.equals(obj);
+        WGraph_Algo graph = (WGraph_Algo) obj;
+        return this.W_graph.equals(graph.W_graph);
     }
 
     /**
@@ -224,25 +227,25 @@ public class WGraph_Algo implements weighted_graph_algorithms , Serializable{
      * and within it we will create a for loop, which will run on the neighbors of each vertex,
      * and if its meta_data is "white" it will change the meta_data to "black" and do counter ++
      * Finally we reset the meta_data and return the counter.
+     *
      * @param graph
-     * @return
-     * run time:O(V+E) v=vertexes , E=edges
+     * @return run time:O(V+E) v=vertexes , E=edges
      */
-    private int BFS (weighted_graph graph){
+    private int BFS(weighted_graph graph) {
         node_info node = this.W_graph.getV().iterator().next();
         WGraph_DS.Node nodeCa = (WGraph_DS.Node) node;
         Queue<node_info> QueueOfVertexes = new LinkedList<node_info>();
-        int counter=1;
+        int counter = 1;
         QueueOfVertexes.add(node);
         node.setInfo("black");
 
-        while(!QueueOfVertexes.isEmpty()){
+        while (!QueueOfVertexes.isEmpty()) {
             node_info temp = QueueOfVertexes.poll();
             WGraph_DS.Node tempCa = (WGraph_DS.Node) temp;
             Collection<node_info> neighbor = ((WGraph_DS.Node) tempCa).getNi();
-            for(node_info nodeNext : neighbor){
-                node_info nodeNextCa = (WGraph_DS.Node)nodeNext;
-                if(nodeNextCa.getInfo().equals("white")) {
+            for (node_info nodeNext : neighbor) {
+                node_info nodeNextCa = (WGraph_DS.Node) nodeNext;
+                if (nodeNextCa.getInfo().equals("white")) {
                     QueueOfVertexes.add(nodeNext);
                     nodeNextCa.setInfo("black");
                     counter++;
@@ -251,12 +254,11 @@ public class WGraph_Algo implements weighted_graph_algorithms , Serializable{
         }
         //for initialize the meta_data to white again.
         Collection<node_info> vertexes = graph.getV();
-        for(node_info vertex : vertexes){
+        for (node_info vertex : vertexes) {
             vertex.setInfo("white");
         }
         return counter;
     }
-
 
 
     /**
@@ -270,38 +272,40 @@ public class WGraph_Algo implements weighted_graph_algorithms , Serializable{
      * We are then asked whether in the Boolean array its value is equal to false and if so we will ask if his tag is greater then his weigt +his father tag and if so we will change his tag to be:his weigt +his father tag.
      * after that we will change to true the place of the father.
      * and finally we will return false
-     * @param  src,dest
-     * @return
-     * run time:O(V+E) v=vertexes , E=edges
+     *
+     * @param src,dest
+     * @return run time:O(V+E) v=vertexes , E=edges
      */
-    private boolean BFS ( node_info src , node_info dest ) {
+    private boolean BFS(node_info src, node_info dest) {
         boolean[] visit = new boolean[this.W_graph.nodeSize()];
         PriorityQueue<WGraph_DS.Node> QueueOfVertexes = new PriorityQueue<WGraph_DS.Node>();
 
-        WGraph_DS.Node srcCast = (WGraph_DS.Node)src;
-        WGraph_DS.Node destCast = (WGraph_DS.Node)dest;
+        WGraph_DS.Node srcCast = (WGraph_DS.Node) src;
+        WGraph_DS.Node destCast = (WGraph_DS.Node) dest;
         int counterPlace = 1;
         srcCast.setPlace(0);
         srcCast.setTag(0.0);
         QueueOfVertexes.add(srcCast);
         while (!QueueOfVertexes.isEmpty()) {
             node_info father = QueueOfVertexes.poll();
-            WGraph_DS.Node fatherCast = (WGraph_DS.Node)father;
-            if(fatherCast.getKey()==destCast.getKey()) {return true;}
+            WGraph_DS.Node fatherCast = (WGraph_DS.Node) father;
+            if (fatherCast.getKey() == destCast.getKey()) {
+                return true;
+            }
             Collection<node_info> neighbor = ((WGraph_DS.Node) father).getNi();
-            for(node_info nodeNext : neighbor){
-                WGraph_DS.Node nodeNextCast  = (WGraph_DS.Node)nodeNext;
-                if(nodeNextCast.getPlace()==-1) {
+            for (node_info nodeNext : neighbor) {
+                WGraph_DS.Node nodeNextCast = (WGraph_DS.Node) nodeNext;
+                if (nodeNextCast.getPlace() == -1) {
                     nodeNextCast.setPlace(counterPlace++);
                 }
-                if(visit[nodeNextCast.getPlace()]==false){
+                if (visit[nodeNextCast.getPlace()] == false) {
                     QueueOfVertexes.add(nodeNextCast);
-                    if(nodeNextCast.getTag()> this.W_graph.getEdge(fatherCast.getKey(),nodeNextCast.getKey())+fatherCast.getTag())
-                    nodeNextCast.setTag(fatherCast.getTag()+this.W_graph.getEdge(fatherCast.getKey(),nodeNextCast.getKey()));
+                    if (nodeNextCast.getTag() > this.W_graph.getEdge(fatherCast.getKey(), nodeNextCast.getKey()) + fatherCast.getTag())
+                        nodeNextCast.setTag(fatherCast.getTag() + this.W_graph.getEdge(fatherCast.getKey(), nodeNextCast.getKey()));
                     nodeNextCast.setPreviousKey(fatherCast.getKey());
                 }
             }
-            visit[fatherCast.getPlace()]=true;
+            visit[fatherCast.getPlace()] = true;
 
         }
         return false;
@@ -309,10 +313,11 @@ public class WGraph_Algo implements weighted_graph_algorithms , Serializable{
 
     /**
      * This function initializes the fields:tag,PreviousKey,Place.
+     *
      * @param W_graph
      */
-    private void resetNodes(weighted_graph W_graph){
-        for(node_info node : W_graph.getV()){
+    private void resetNodes(weighted_graph W_graph) {
+        for (node_info node : W_graph.getV()) {
             WGraph_DS.Node nodeCast = (WGraph_DS.Node) node;
             nodeCast.setTag(0.0);
             nodeCast.setPreviousKey(-1);
@@ -330,25 +335,49 @@ public class WGraph_Algo implements weighted_graph_algorithms , Serializable{
         wg2.addNode(4);
         wg2.addNode(5);
         wg2.addNode(6);
+        wg2.addNode(7);
+        wg2.addNode(8);
+        wg2.addNode(10);
 
-       wg2.connect(0,1,2);
-       // wg2.connect(0,2,1);
-        wg2.connect(0,3,2.1);
-        wg2.connect(0,5,2);
-        wg2.connect(5,6,1.444);
-        wg2.connect(6,3,1);
-        wg2.connect(4,1,3);
+        wg2.connect(0, 1, 1);
+        wg2.connect(0, 2, 10);
+
+        wg2.connect(1, 4, 2);
+        wg2.connect(1, 5, 7);
+
+        wg2.connect(2, 4, 3);
+        wg2.connect(2, 6, 10);
+        wg2.connect(2, 3, 10);
+
+        wg2.connect(3, 6, 10);
+
+        wg2.connect(4, 5, 1);
+        wg2.connect(4, 7, 4);
 
 
+        wg2.connect(5, 7, 1);
+        wg2.connect(5, 8, 10);
+        wg2.connect(5, 10, 10);
 
+        wg2.connect(6, 10, 10);
+
+        wg2.connect(7, 10, 2);
+
+        wg2.connect(8, 10, 10);
 
         wg.init(wg2);
         System.out.println(wg.isConnected());
         System.out.println(wg);
-        double d = wg.shortestPathDist(0, 6);
-        System.out.println(wg.shortestPath(0,6));
+        double d = wg.shortestPathDist(0, 2);
         System.out.println(d);
+        System.out.println(wg.shortestPath(0, 2));
+        weighted_graph wg3 = wg.copy();
+        weighted_graph_algorithms gra = new WGraph_Algo();
+        gra.init(wg3);
 
-
+        System.out.println(wg.save("C:\\Users\\ליאב וייס\\Desktop\\liav\\test.txt"));
+        System.out.println(wg.load("C:\\Users\\ליאב וייס\\Desktop\\liav\\test.txt"));
+        System.out.println(wg.W_graph);
+        System.out.println(wg.equals(gra));
     }
 }
