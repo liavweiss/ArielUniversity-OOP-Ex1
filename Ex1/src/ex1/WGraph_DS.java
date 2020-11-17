@@ -44,7 +44,6 @@ public class WGraph_DS implements weighted_graph, Serializable {
          * previous - Represents the key of the previous node in the shortest path(help us to to create the path).
          * meta_data - Represents the information of each node.
          * tag - Represents the tag of each node.
-         * placeArray - Represents the place of visit array in the shortest path function.
          */
         private int key;
         private HashMap<Integer, node_info> neighbor;
@@ -52,7 +51,7 @@ public class WGraph_DS implements weighted_graph, Serializable {
         private int previousKey;
         private String meta_data;
         private double tag;
-        private int placeArray;
+
 
         /**
          * a default constructor.
@@ -66,7 +65,6 @@ public class WGraph_DS implements weighted_graph, Serializable {
             this.weight = new HashMap<>();
             this.neighbor = new HashMap<>();
             this.previousKey = -1;
-            this.placeArray = -1;
         }
 
         /**
@@ -81,7 +79,6 @@ public class WGraph_DS implements weighted_graph, Serializable {
             this.meta_data = new String(node.getInfo());
             this.tag = node.getTag();
             Node n = (Node) node;
-            this.placeArray = n.getPlace();
             this.previousKey = n.getPreviousKey();
         }
 
@@ -162,24 +159,6 @@ public class WGraph_DS implements weighted_graph, Serializable {
          */
         public void setPreviousKey(int key) {
             this.previousKey = key;
-        }
-
-        /**
-         * get the place of the node in the visit array(its for the shortest path function).
-         *
-         * @return
-         */
-        public int getPlace() {
-            return this.placeArray;
-        }
-
-        /**
-         * A function that allows you to change the place in the visit array(its for the shortest path function).
-         *
-         * @param place
-         */
-        public void setPlace(int place) {
-            this.placeArray = place;
         }
 
         /**

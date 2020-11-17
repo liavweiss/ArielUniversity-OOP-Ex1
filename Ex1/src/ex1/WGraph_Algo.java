@@ -84,7 +84,7 @@ public class WGraph_Algo implements weighted_graph_algorithms, Serializable {
     /**
      * returns the length of the shortest path between src to dest
      * we will do it by first check that the input is correct and then send it to the
-     * BFS function, if true we will return the tag of the dest.
+     * Dij function, if true we will return the tag of the dest.
      * and initialize the fields with resetNode function.
      * Otherwise we will return -1.
      *
@@ -100,7 +100,7 @@ public class WGraph_Algo implements weighted_graph_algorithms, Serializable {
         }
         WGraph_DS.Node srcCast = (WGraph_DS.Node) this.W_graph.getNode(src);
         WGraph_DS.Node destCast = (WGraph_DS.Node) this.W_graph.getNode(dest);
-        if (BFS(this.W_graph.getNode(src), this.W_graph.getNode(dest)) == true) {
+        if (Dij(this.W_graph.getNode(src), this.W_graph.getNode(dest)) == true) {
             double ans = destCast.getTag();
             resetNodes(this.W_graph);
             return ans;
@@ -112,7 +112,7 @@ public class WGraph_Algo implements weighted_graph_algorithms, Serializable {
      * returns the the shortest path between src to dest - as an ordered List of nodes:
      * src--> n1-->n2-->...dest
      * we will do it by First check that the input is correct and then we will send it to
-     * the BFS function, if true we will use the while loop and enter the list according to the field PreviousKey,
+     * the Dij function, if true we will use the while loop and enter the list according to the field PreviousKey,
      * in the end we will initialize fields with resetNode function and return the path(null if none).
      *
      * @param src  - start node
@@ -126,14 +126,14 @@ public class WGraph_Algo implements weighted_graph_algorithms, Serializable {
         }
         List<node_info> thePath1 = new LinkedList<>();
         List<node_info> thePath2 = new LinkedList<>();
-        if (BFS(this.W_graph.getNode(src), this.W_graph.getNode(dest)) == true) {
+        if (Dij(this.W_graph.getNode(src), this.W_graph.getNode(dest)) == true) {
             WGraph_DS.Node srcCast = (WGraph_DS.Node) this.W_graph.getNode(src);
             WGraph_DS.Node destCast = (WGraph_DS.Node) this.W_graph.getNode(dest);
-            while (destCast.getPreviousKey() != srcCast.getPreviousKey()) {
-                thePath1.add(((WGraph_DS.Node) this.W_graph.getNode(destCast.getPreviousKey())));
+            while (destCast!=null) {
+                thePath1.add(((WGraph_DS.Node) this.W_graph.getNode(destCast.getKey())));
                 destCast = (WGraph_DS.Node) this.W_graph.getNode(destCast.getPreviousKey());
             }
-            for (int i = thePath1.size() - 1; i >= 0; i--) {
+            for (int i = thePath1.size()-1 ; i >= 0; i--) {
                 thePath2.add(thePath1.get(i));
             }
         }
@@ -262,28 +262,24 @@ public class WGraph_Algo implements weighted_graph_algorithms, Serializable {
 
 
     /**
-     * First we define a counterplace int that will be responsible for the location of each node in the visit array.
-     * we will add to the priority queue the src variable.
-     * We will initialize src.tag to be 0 .
-     * We will perform a loop while as long as the queue is not empty we will perform:
-     * ask if the key of the current father == dest.key , if so
-     * we will breake away from the BFS function.
-     * after that we will run on the neighbors of the same vertex that is in the queue,  update its place on the visit array (with the counterPlace)
-     * We are then asked whether in the Boolean array its value is equal to false and if so we will ask if his tag is greater then his weigt +his father tag and if so we will change his tag to be:his weigt +his father tag.
-     * after that we will change to true the place of the father.
-     * and finally we will return false
+     * First we will initialize the src tag to be 0, we will add it to the priority queue
+     * We will perform a loop as long as the queue is not empty We will perform:
+     * Ask if the key of the current parent == dest.key, if so
+     * Disconnected from the Dij function.
+     * Then we will run over neighbors the same vertex that is in the queue
+     * And we are asked if his info is equal to "white" and if so we are asked if his badge is bigger than his tag + his father's badge and if so we will change his badge to be:
+     * His tag + his father tag.
+     * Then we will change the info of the father to "black".
+     * And finally we will return false.
      *
      * @param src,dest
      * @return run time:O(V+E) v=vertexes , E=edges
      */
-    private boolean BFS(node_info src, node_info dest) {
-        boolean[] visit = new boolean[this.W_graph.nodeSize()];
-        PriorityQueue<WGraph_DS.Node> QueueOfVertexes = new PriorityQueue<WGraph_DS.Node>();
+    private boolean Dij(node_info src, node_info dest) {
 
+        PriorityQueue<WGraph_DS.Node> QueueOfVertexes = new PriorityQueue<WGraph_DS.Node>();
         WGraph_DS.Node srcCast = (WGraph_DS.Node) src;
         WGraph_DS.Node destCast = (WGraph_DS.Node) dest;
-        int counterPlace = 1;
-        srcCast.setPlace(0);
         srcCast.setTag(0.0);
         QueueOfVertexes.add(srcCast);
         while (!QueueOfVertexes.isEmpty()) {
@@ -292,22 +288,23 @@ public class WGraph_Algo implements weighted_graph_algorithms, Serializable {
             if (fatherCast.getKey() == destCast.getKey()) {
                 return true;
             }
-            Collection<node_info> neighbor = ((WGraph_DS.Node) father).getNi();
+            Collection<node_info> neighbor = fatherCast.getNi();
             for (node_info nodeNext : neighbor) {
                 WGraph_DS.Node nodeNextCast = (WGraph_DS.Node) nodeNext;
-                if (nodeNextCast.getPlace() == -1) {
-                    nodeNextCast.setPlace(counterPlace++);
-                }
-                if (visit[nodeNextCast.getPlace()] == false) {
-                    QueueOfVertexes.add(nodeNextCast);
-                    if (nodeNextCast.getTag() > this.W_graph.getEdge(fatherCast.getKey(), nodeNextCast.getKey()) + fatherCast.getTag())
-                        nodeNextCast.setTag(fatherCast.getTag() + this.W_graph.getEdge(fatherCast.getKey(), nodeNextCast.getKey()));
+
+                if (nodeNextCast.getTag() > this.W_graph.getEdge(fatherCast.getKey(), nodeNextCast.getKey()) + fatherCast.getTag()) {
+                    nodeNextCast.setTag(fatherCast.getTag() + this.W_graph.getEdge(fatherCast.getKey(), nodeNextCast.getKey()));
                     nodeNextCast.setPreviousKey(fatherCast.getKey());
                 }
+            if (nodeNextCast.getInfo().equals("white")) {
+                QueueOfVertexes.add(nodeNextCast);
             }
-            visit[fatherCast.getPlace()] = true;
-
         }
+
+
+        fatherCast.setInfo("black");
+
+    }
         return false;
     }
 
@@ -319,9 +316,9 @@ public class WGraph_Algo implements weighted_graph_algorithms, Serializable {
     private void resetNodes(weighted_graph W_graph) {
         for (node_info node : W_graph.getV()) {
             WGraph_DS.Node nodeCast = (WGraph_DS.Node) node;
-            nodeCast.setTag(0.0);
+            nodeCast.setTag(Double.MAX_VALUE);
             nodeCast.setPreviousKey(-1);
-            nodeCast.setPlace(-1);
+            nodeCast.setInfo("white");
         }
     }
 
@@ -337,47 +334,30 @@ public class WGraph_Algo implements weighted_graph_algorithms, Serializable {
         wg2.addNode(6);
         wg2.addNode(7);
         wg2.addNode(8);
+        wg2.addNode(9);
         wg2.addNode(10);
 
-        wg2.connect(0, 1, 1);
-        wg2.connect(0, 2, 10);
-
-        wg2.connect(1, 4, 2);
-        wg2.connect(1, 5, 7);
-
-        wg2.connect(2, 4, 3);
-        wg2.connect(2, 6, 10);
-        wg2.connect(2, 3, 10);
-
-        wg2.connect(3, 6, 10);
-
-        wg2.connect(4, 5, 1);
-        wg2.connect(4, 7, 4);
-
-
-        wg2.connect(5, 7, 1);
-        wg2.connect(5, 8, 10);
-        wg2.connect(5, 10, 10);
-
-        wg2.connect(6, 10, 10);
-
-        wg2.connect(7, 10, 2);
-
-        wg2.connect(8, 10, 10);
+        wg2.connect(0,1,3);
+        wg2.connect(1,2,1.1);
+        wg2.connect(7,1,7.6);
+        wg2.connect(2,4,2.2);
+        wg2.connect(4,5,1);
+        wg2.connect(4,8,3.3);
+        wg2.connect(8,7,0.9);
+        wg2.connect(5,6,4.2);
+        wg2.connect(6,10,6);
+        wg2.connect(9,10,3.1);
+        wg2.connect(9,3,4);
 
         wg.init(wg2);
+        System.out.println(wg.shortestPath(0,7));
+        System.out.println(wg.shortestPathDist(0,7));
+        System.out.println(wg2.getNode(0).equals(wg2.getNode(0)));
         System.out.println(wg.isConnected());
-        System.out.println(wg);
-        double d = wg.shortestPathDist(0, 2);
-        System.out.println(d);
-        System.out.println(wg.shortestPath(0, 2));
-        weighted_graph wg3 = wg.copy();
-        weighted_graph_algorithms gra = new WGraph_Algo();
-        gra.init(wg3);
 
-        System.out.println(wg.save("C:\\Users\\ליאב וייס\\Desktop\\liav\\test.txt"));
-        System.out.println(wg.load("C:\\Users\\ליאב וייס\\Desktop\\liav\\test.txt"));
-        System.out.println(wg.W_graph);
-        System.out.println(wg.equals(gra));
+//        System.out.println(wg.save("C:\\Users\\ליאב וייס\\Desktop\\liav\\test.txt"));
+//        System.out.println(wg.load("C:\\Users\\ליאב וייס\\Desktop\\liav\\test.txt"));
+//        System.out.println(wg.W_graph);
+//        System.out.println(wg.equals(gra));
     }
 }
