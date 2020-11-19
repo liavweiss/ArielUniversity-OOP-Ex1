@@ -1,8 +1,9 @@
 # Ex1
 -------------------------------------------------------
-My project deals with undirectional weighted graph, in this project there are two classes and one internal class that apply an weighted graph. I would like to explain about each class written in this project.
+## Introduction
+My project deals with a non-directional weighted graph, the project implements a number of algorithms in the graph. The project contains three interfaces, two classrooms and one internal lesson that implements a non-directional weighted graph. I would like to explain about each lesson written in this project.
 
-### The internal class: Node:
+## The internal class: Node:
 This class implements the interface that represents the set of operations applicable on a node (vertex) in an weighted graph.
 
 In this class we have six feilds:
@@ -29,7 +30,7 @@ the baisic functions are: `getKey()`,`getInfo()`,`setInfo(String s)`,`getTag()` 
 * `equals(Object obj)` - an equals function.do this with three private Auxiliary functions.
 * `toString()` - toString function that string each node without his neighbor.
 
-###  class: WGraph_DS:
+##  class: WGraph_DS:
 This class implements the interface that represents an undirectional weighted graph.It support a large number of nodes (over 10^6, with average degree of 10).
 
 In this class we have four feilds:
@@ -59,7 +60,7 @@ In this class we have two constructors and fourteen functions.
 * `equals(Object obj)` - an equals function , do this with two iterator that run on the vertexes of the graph and inside asked if its the same node in both graph with Node          equals function.
 * `toString()` - toString function that string each node with his neighbor.
 
-###  class: WGraph_Algo:
+##  class: WGraph_Algo:
 This class implements the interface that represents an Undirected (positive) Weighted Graph Theory algorithms including:
 0. `clone();` (copy)
 1. `init(graph);`
