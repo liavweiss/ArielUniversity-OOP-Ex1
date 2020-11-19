@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 
+
 /**
  * This class implements the interface that represents an undirectional weighted graph.
  * It support a large number of nodes (over 10^6, with average degree of 10).
@@ -34,7 +35,7 @@ public class WGraph_DS implements weighted_graph, Serializable {
      *
      * @author liav.weiss
      */
-    public class Node implements node_info, Comparable<Node> {
+    public class Node implements node_info, Comparable<Node>,Serializable{
 
 
         /**
@@ -242,7 +243,6 @@ public class WGraph_DS implements weighted_graph, Serializable {
             Collection<node_info> this_Neighbor = this.neighbor.values();
             Collection<node_info> node_Neighbor = nodeNeighbor.values();
             Iterator<node_info> this_Neighbor_Ite = this_Neighbor.iterator();
-            // Iterator<node_info> node_Neighbor_Ite = node_Neighbor.iterator();
             while (this_Neighbor_Ite.hasNext()) {
                 Node nodeCast1 = (Node) this_Neighbor_Ite.next();
                 for (node_info nodeNi : node_Neighbor) {
@@ -440,7 +440,7 @@ public class WGraph_DS implements weighted_graph, Serializable {
      * nodes connected to node_id
      *
      * @return Collection<node_data>
-     * run time: O(k) , k - being the degree of node_id.
+     * run time: O(1).
      */
     @Override
     public Collection<node_info> getV(int node_id) {
@@ -580,31 +580,5 @@ public class WGraph_DS implements weighted_graph, Serializable {
             s += '}';
         }
         return s;
-    }
-
-
-    public static void main(String[] args) {
-        WGraph_DS g = new WGraph_DS();
-        g.addNode(1);
-        g.addNode(2);
-        g.addNode(3);
-        g.addNode(4);
-        g.addNode(5);
-        g.addNode(1);
-
-
-        g.connect(1, 3, 2);
-        g.connect(1, 3, 4);
-        g.connect(1, 6, 5);
-        g.connect(1, 1, 3);
-        WGraph_DS g1 = new WGraph_DS(g);
-        System.out.println(g.equals(g1));
-        System.out.println(g.hasEdge(1, 3));
-        System.out.println(g.hasEdge(1, 1));
-        System.out.println(g.hasEdge(1, 6));
-        System.out.println(g.hasEdge(1, 2));
-        System.out.println(g);
-
-
     }
 }

@@ -20,7 +20,7 @@ import java.util.*;
 public class WGraph_Algo implements weighted_graph_algorithms, Serializable {
 
     /**
-     * @object W_graph - Represents the graph.
+     * W_graph - Represents the graph.
      */
     private weighted_graph W_graph;
 
@@ -160,16 +160,17 @@ public class WGraph_Algo implements weighted_graph_algorithms, Serializable {
 
             // Method for serialization of object
             out.writeObject(this.W_graph);
-
-            out.close();
             fileName.close();
+            out.close();
 
-            System.out.println("Object has been serialized");
-            return true;
+
+
         } catch (IOException ex) {
             System.out.println("IOException is caught");
             return false;
         }
+        System.out.println("Object has been serialized");
+        return true;
     }
 
     /**
@@ -195,8 +196,7 @@ public class WGraph_Algo implements weighted_graph_algorithms, Serializable {
             in.close();
             fileName.close();
 
-            System.out.println("the W_graph has been deserialized ");
-            return true;
+
         } catch (IOException ex) {
             System.out.println("IOException is caught");
             return false;
@@ -204,6 +204,8 @@ public class WGraph_Algo implements weighted_graph_algorithms, Serializable {
             System.out.println("ClassNotFoundException is caught");
             return false;
         }
+        System.out.println("the W_graph has been deserialized ");
+        return true;
     }
 
     /**
@@ -252,20 +254,16 @@ public class WGraph_Algo implements weighted_graph_algorithms, Serializable {
                 }
             }
         }
-        //for initialize the meta_data to white again.
-        Collection<node_info> vertexes = graph.getV();
-        for (node_info vertex : vertexes) {
-            vertex.setInfo("white");
-        }
+        resetNodes(graph);
         return counter;
     }
 
 
     /**
      * First we will initialize the src tag to be 0, we will add it to the priority queue
-     * We will perform a loop as long as the queue is not empty We will perform:
+     * We will perform a loop as long as the queue is not empty
      * Ask if the key of the current parent == dest.key, if so
-     * Disconnected from the Dij function.
+     * we will break from the Dij function.
      * Then we will run over neighbors the same vertex that is in the queue
      * And we are asked if his info is equal to "white" and if so we are asked if his badge is bigger than his tag + his father's badge and if so we will change his badge to be:
      * His tag + his father tag.
@@ -320,44 +318,5 @@ public class WGraph_Algo implements weighted_graph_algorithms, Serializable {
             nodeCast.setPreviousKey(-1);
             nodeCast.setInfo("white");
         }
-    }
-
-    public static void main(String[] args) {
-        WGraph_Algo wg = new WGraph_Algo();
-        WGraph_DS wg2 = new WGraph_DS();
-        wg2.addNode(0);
-        wg2.addNode(1);
-        wg2.addNode(2);
-        wg2.addNode(3);
-        wg2.addNode(4);
-        wg2.addNode(5);
-        wg2.addNode(6);
-        wg2.addNode(7);
-        wg2.addNode(8);
-        wg2.addNode(9);
-        wg2.addNode(10);
-
-        wg2.connect(0,1,3);
-        wg2.connect(1,2,1.1);
-        wg2.connect(7,1,7.6);
-        wg2.connect(2,4,2.2);
-        wg2.connect(4,5,1);
-        wg2.connect(4,8,3.3);
-        wg2.connect(8,7,0.9);
-        wg2.connect(5,6,4.2);
-        wg2.connect(6,10,6);
-        wg2.connect(9,10,3.1);
-        wg2.connect(9,3,4);
-
-        wg.init(wg2);
-        System.out.println(wg.shortestPath(0,7));
-        System.out.println(wg.shortestPathDist(0,7));
-        System.out.println(wg2.getNode(0).equals(wg2.getNode(0)));
-        System.out.println(wg.isConnected());
-
-//        System.out.println(wg.save("C:\\Users\\ליאב וייס\\Desktop\\liav\\test.txt"));
-//        System.out.println(wg.load("C:\\Users\\ליאב וייס\\Desktop\\liav\\test.txt"));
-//        System.out.println(wg.W_graph);
-//        System.out.println(wg.equals(gra));
     }
 }
