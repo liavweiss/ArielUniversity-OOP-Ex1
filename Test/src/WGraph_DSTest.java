@@ -1,8 +1,6 @@
-package ex1;
-
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Random;
 
@@ -15,8 +13,8 @@ class WGraph_DSTest {
     void getNode() {
         weighted_graph ga = new WGraph_DS();
         ga.addNode(0);
-        assertNull(ga.getNode(1));
-        assertNotNull(0);
+        Assertions.assertNull(ga.getNode(1));
+        Assertions.assertNotNull(0);
     }
 
     @Test
@@ -25,7 +23,7 @@ class WGraph_DSTest {
         ga.addNode(0);
         ga.addNode(0);
         int node_size = ga.nodeSize();
-        assertTrue(node_size == 1);
+        Assertions.assertTrue(node_size == 1);
     }
 
     @Test
@@ -40,9 +38,9 @@ class WGraph_DSTest {
         double o1 = ga.getEdge(0, 1);
         double o2 = ga.getEdge(1, 2);
         double o3 = ga.getEdge(0, 0);
-        assertEquals(3, o1);
-        assertEquals(-1, o2);
-        assertNotEquals(o3, 4);
+        Assertions.assertEquals(3, o1);
+        Assertions.assertEquals(-1, o2);
+        Assertions.assertNotEquals(o3, 4);
     }
 
     @Test
@@ -55,7 +53,7 @@ class WGraph_DSTest {
         ga.removeNode(0);
         ga.removeNode(4);
         int node_size = ga.nodeSize();
-        assertTrue(node_size == 1);
+        Assertions.assertTrue(node_size == 1);
 
     }
 
@@ -71,9 +69,9 @@ class WGraph_DSTest {
         ga.connect(1, 2, 3);
         ga.removeNode(0);
         int edge_size = ga.edgeSize();
-        assertEquals(1, edge_size);
+        Assertions.assertEquals(1, edge_size);
         ga.connect(2, 1, 4);
-        assertEquals(edge_size, 1);
+        Assertions.assertEquals(edge_size, 1);
 
     }
 
@@ -94,7 +92,7 @@ class WGraph_DSTest {
         for (node_info node : vertex) {
             Collection<node_info> vertexNi = ga.getV(node.getKey());
             for (node_info ni : vertexNi) {
-                assertNotNull(ni);
+                Assertions.assertNotNull(ni);
             }
         }
     }
@@ -109,7 +107,7 @@ class WGraph_DSTest {
         Collection<node_info> ni1 = g.getV(1);
         double weight = g.getEdge(key, ni1.iterator().next().getKey());
         double ex = 0.1;
-        assertEquals(weight, ex, 0.9);
+        Assertions.assertEquals(weight, ex, 0.9);
     }
 
     @Test
@@ -144,7 +142,7 @@ class WGraph_DSTest {
         ga.connect(0, 6, 3);
         ga.connect(0, 0, 3);
         double o1 = ga.getEdge(0, 1);
-        assertFalse(o1 == 3);
+        Assertions.assertFalse(o1 == 3);
         assertTrue(ga.hasEdge(0, 1));
     }
 
@@ -166,8 +164,8 @@ class WGraph_DSTest {
         ga.addNode(0);
         int node_size = ga.nodeSize();
         int edge_size = ga.edgeSize();
-        assertEquals(4, node_size);
-        assertEquals(1, edge_size);
+        Assertions.assertEquals(4, node_size);
+        Assertions.assertEquals(1, edge_size);
     }
 
     @Test
@@ -190,8 +188,8 @@ class WGraph_DSTest {
         double o1 = ga.getEdge(0, 1);
         double o2 = ga.getEdge(1, 2);
         double o3 = ga.getEdge(0, 3);
-        assertEquals(o1, o2);
-        assertNotEquals(o1, 03);
+        Assertions.assertEquals(o1, o2);
+        Assertions.assertNotEquals(o1, 03);
     }
 
 

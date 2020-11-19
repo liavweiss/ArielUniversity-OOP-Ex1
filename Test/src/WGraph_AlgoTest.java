@@ -1,5 +1,4 @@
-package ex1;
-
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Iterator;
@@ -42,10 +41,10 @@ class WGraph_AlgoTest {
         ag0.init(g0);
         assertTrue(ag0.isConnected());
         double sPhatNumber = ag0.shortestPathDist(0,7);
-        assertEquals(sPhatNumber, 10.5);
+        Assertions.assertEquals(sPhatNumber, 10.5);
         g0.connect(7,1,7.4);
         double sPhatNumber2 = ag0.shortestPathDist(0,7);
-        assertEquals(sPhatNumber2,10.4);
+        Assertions.assertEquals(sPhatNumber2,10.4);
     }
 
     @Test
