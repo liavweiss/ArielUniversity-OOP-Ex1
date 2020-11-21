@@ -4,8 +4,6 @@ import org.junit.jupiter.api.Test;
 import java.util.Collection;
 import java.util.Random;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class WGraph_DSTest {
     private static Random _rnd = null;
 
@@ -122,9 +120,9 @@ class WGraph_DSTest {
         ga.connect(0, 3, 3);
         ga.connect(0, 4, 3);
         ga.connect(0,0,3);
-        assertFalse(ga.hasEdge(1,4));
-        assertFalse(ga.hasEdge(0,0));
-        assertTrue(ga.hasEdge(0,4));
+        Assertions.assertFalse(ga.hasEdge(1,4));
+        Assertions.assertFalse(ga.hasEdge(0,0));
+        Assertions.assertTrue(ga.hasEdge(0,4));
     }
 
     @Test
@@ -143,7 +141,7 @@ class WGraph_DSTest {
         ga.connect(0, 0, 3);
         double o1 = ga.getEdge(0, 1);
         Assertions.assertFalse(o1 == 3);
-        assertTrue(ga.hasEdge(0, 1));
+        Assertions.assertTrue(ga.hasEdge(0, 1));
     }
 
 

@@ -6,8 +6,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class WGraph_AlgoTest {
 
     @Test
@@ -17,21 +15,21 @@ class WGraph_AlgoTest {
         ag0.init(g0);
         weighted_graph g1 = ag0.copy();
         g1.removeNode(0);
-        assertFalse(g0.equals(g1));
+        Assertions.assertFalse(g0.equals(g1));
     }
     @Test
     void isConnected() {
         weighted_graph g0 = Wgraph();
         weighted_graph_algorithms ag0 = new WGraph_Algo();
         ag0.init(g0);
-        assertTrue(ag0.isConnected());
+        Assertions.assertTrue(ag0.isConnected());
         g0.removeEdge(10,9);
         ag0.init(g0);
-        assertFalse(ag0.isConnected());
+        Assertions.assertFalse(ag0.isConnected());
         g0.connect(10,9,3);
         g0.removeNode(7);
         ag0.init(g0);
-        assertTrue(ag0.isConnected());
+        Assertions.assertTrue(ag0.isConnected());
     }
 
     @Test
@@ -39,7 +37,7 @@ class WGraph_AlgoTest {
         weighted_graph g0 = Wgraph();
         weighted_graph_algorithms ag0 = new WGraph_Algo();
         ag0.init(g0);
-        assertTrue(ag0.isConnected());
+        Assertions.assertTrue(ag0.isConnected());
         double sPhatNumber = ag0.shortestPathDist(0,7);
         Assertions.assertEquals(sPhatNumber, 10.5);
         g0.connect(7,1,7.4);
@@ -65,7 +63,7 @@ class WGraph_AlgoTest {
         while(sPath1_It.hasNext()&&sPath_It.hasNext()) {
               node_info node = sPath_It.next();
               node_info node1 = sPath1_It.next();
-                assertEquals(node,node1);
+                Assertions.assertEquals(node,node1);
             }
         }
 
@@ -79,9 +77,9 @@ class WGraph_AlgoTest {
         ag0.save(str);
         weighted_graph g1 = Wgraph();
         ag0.load(str);
-        assertEquals(g0,g1);
+        Assertions.assertEquals(g0,g1);
         g0.removeNode(0);
-        assertNotEquals(g0,g1);
+        Assertions.assertNotEquals(g0,g1);
     }
 
 
