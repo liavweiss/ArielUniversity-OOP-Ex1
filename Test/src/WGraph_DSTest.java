@@ -100,8 +100,8 @@ class WGraph_DSTest {
 
     @Test
     public void runTime() {
-        int node_size = 100000;
-        int edge_size = node_size * 10;
+        int node_size = 1000000;
+        int edge_size = node_size ;
         weighted_graph g = graphCreator(node_size, edge_size);
         int key = 1;
         Collection<node_info> ni1 = g.getV(1);
@@ -134,7 +134,7 @@ class WGraph_DSTest {
         ga.addNode(1);
         ga.addNode(2);
         ga.addNode(3);
-        ga.connect(0, 1, 3);
+        ga.connect(0, 1, 0);
         ga.connect(0, 2, 3);
         ga.connect(0, 3, 3);
         ga.connect(1, 2, 3);

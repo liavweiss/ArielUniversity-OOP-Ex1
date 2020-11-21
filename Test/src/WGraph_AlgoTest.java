@@ -84,6 +84,7 @@ class WGraph_AlgoTest {
         assertNotEquals(g0,g1);
     }
 
+
     private weighted_graph Wgraph() {
         weighted_graph g0 = WGraph_DSTest.graphCreator(11,0);
         g0.connect(0,1,3);

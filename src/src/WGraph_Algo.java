@@ -152,16 +152,11 @@ public class WGraph_Algo implements weighted_graph_algorithms, Serializable {
     @Override
     public boolean save(String file) {
         try {
-            //Saving of object in a file
             FileOutputStream fileName = new FileOutputStream(file);
             ObjectOutputStream out = new ObjectOutputStream(fileName);
-
-            // Method for serialization of object
             out.writeObject(this.W_graph);
             fileName.close();
             out.close();
-
-
 
         } catch (IOException ex) {
             System.out.println("IOException is caught");
@@ -183,17 +178,12 @@ public class WGraph_Algo implements weighted_graph_algorithms, Serializable {
     @Override
     public boolean load(String file) {
         try {
-            // Reading the object from a file
             FileInputStream fileName = new FileInputStream(file);
             ObjectInputStream in = new ObjectInputStream(fileName);
-
-            // Method for deserialization of object
             weighted_graph g = (WGraph_DS) in.readObject();
             this.init(g);
-
             in.close();
             fileName.close();
-
 
         } catch (IOException ex) {
             System.out.println("IOException is caught");
