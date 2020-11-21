@@ -54,7 +54,7 @@ public class WGraph_DS implements weighted_graph, Serializable {
         /**
          * a default constructor.
          *
-         * @param key
+         * @param key - the key of the node.
          */
         public Node(int key) {
             this.key = key;
@@ -68,7 +68,7 @@ public class WGraph_DS implements weighted_graph, Serializable {
         /**
          * deep copy constructor
          *
-         * @param node
+         * @param node - the node we copy from him.
          */
         public Node(node_info node) {
             this.key = node.getKey();
@@ -83,7 +83,7 @@ public class WGraph_DS implements weighted_graph, Serializable {
         /**
          * Return the key (the serial number of this node).
          *
-         * @return
+         * @return - the key we want to get.
          */
         @Override
         public int getKey() {
@@ -93,7 +93,7 @@ public class WGraph_DS implements weighted_graph, Serializable {
         /**
          * return the remark (meta data) associated with this node.
          *
-         * @return
+         * @return -the string we want to get.
          */
         @Override
         public String getInfo() {
@@ -103,7 +103,7 @@ public class WGraph_DS implements weighted_graph, Serializable {
         /**
          * A function that allows changing the remark (meta data) associated with this node.
          *
-         * @param s
+         * @param s -the string we want to set.
          */
         @Override
         public void setInfo(String s) {
@@ -113,7 +113,7 @@ public class WGraph_DS implements weighted_graph, Serializable {
         /**
          * Temporary data on each node.
          *
-         * @return
+         * @return - the tag we want to get.
          */
         @Override
         public double getTag() {
@@ -133,8 +133,8 @@ public class WGraph_DS implements weighted_graph, Serializable {
         /**
          * this function compare two nodes only by their tag.
          *
-         * @param other
-         * @return
+         * @param other - the node we compare it.
+         * @return - if they equal.
          */
         @Override
         public int compareTo(Node other) {
@@ -144,7 +144,7 @@ public class WGraph_DS implements weighted_graph, Serializable {
         /**
          * get the key of the previous node(its for the shortest path function)
          *
-         * @return
+         * @return - the key we want to get.
          */
         public int getPreviousKey() {
             return this.previousKey;
@@ -153,7 +153,7 @@ public class WGraph_DS implements weighted_graph, Serializable {
         /**
          * A function that allows you to change the key of the previous node(its for the shortest path function).
          *
-         * @param key
+         * @param key - the key we want to set.
          */
         public void setPreviousKey(int key) {
             this.previousKey = key;
@@ -168,9 +168,8 @@ public class WGraph_DS implements weighted_graph, Serializable {
 
         /**
          * return true if key is on the list of neighbors of this node.
-         *
-         * @param key
-         * @return
+         * @param key - the key of the node we checks if this.node neighbor.
+         * @return if he his neighbor.
          */
         public boolean hasNi(int key) {
             return this.neighbor.containsKey(key);
@@ -192,7 +191,7 @@ public class WGraph_DS implements weighted_graph, Serializable {
          * Removes the edge this-key,
          * checking if this node exist in the neighbor list and remove from the list.
          *
-         * @param node
+         * @param node - the node we remove.
          */
         public void removeNode(node_info node) {
             if (!this.neighbor.containsKey(node.getKey())) {
@@ -206,8 +205,8 @@ public class WGraph_DS implements weighted_graph, Serializable {
          * an equals function.
          * do this with three Auxiliary functions.
          *
-         * @param obj
-         * @return
+         * @param obj - the node we checks if it equal to this.node.
+         * @return -if they equals.
          */
         @Override
         public boolean equals(Object obj) {
@@ -219,8 +218,8 @@ public class WGraph_DS implements weighted_graph, Serializable {
         /**
          * this function checks if all the regular fields are the same.
          *
-         * @param node
-         * @return
+         * @param node - the node we checks if it equal to this.node.
+         * @return - if they equals.
          */
         private boolean equal1(node_info node) {
             Node nodeCast = (Node) node;
@@ -231,8 +230,8 @@ public class WGraph_DS implements weighted_graph, Serializable {
          * this function checks if two hashMap of Integer and node_data are the same.
          * run on two iterators and asked if all the fields are equals.
          *
-         * @param nodeNeighbor
-         * @return
+         * @param nodeNeighbor - hashmap of the neighbor.
+         * @return if this hashmap equal to nodeNeighbor hashmap.
          */
         private boolean equalNeighbor(HashMap<Integer, node_info> nodeNeighbor) {
             boolean flag = false;
@@ -255,8 +254,8 @@ public class WGraph_DS implements weighted_graph, Serializable {
          * this function checks if two hashMap of Integer and Double are the same.
          * run on two iterators and asked if all the fields are equals.
          *
-         * @param nodeWeight
-         * @return
+         * @param nodeWeight - the hashmap of the weights.
+         * @return - if this hashmap equal to nodeWeight hashmap.
          */
         private boolean equalWeight(HashMap<Integer, Double> nodeWeight) {
 
@@ -277,7 +276,7 @@ public class WGraph_DS implements weighted_graph, Serializable {
         /**
          * toString function that string each node without his neighbor.
          *
-         * @return
+         * @return - string of node.
          */
         @Override
         public String toString() {
@@ -305,7 +304,7 @@ public class WGraph_DS implements weighted_graph, Serializable {
     /**
      * a deep copy constructor.
      *
-     * @param graph
+     * @param graph - the graph we copy him.
      */
     public WGraph_DS(weighted_graph graph) {
         this.W_graph = new HashMap<Integer, node_info>();
@@ -345,9 +344,9 @@ public class WGraph_DS implements weighted_graph, Serializable {
     /**
      * return true if and only if there is an edge between node1 and node2.
      *
-     * @param node1
-     * @param node2
-     * @return run time:O(1).
+     * @param node1,node2 - the nodes we checks if there is edge between them.
+     * @return - if there has edge.
+     * run time:O(1).
      */
     @Override
     public boolean hasEdge(int node1, int node2) {
@@ -362,9 +361,9 @@ public class WGraph_DS implements weighted_graph, Serializable {
      * return the weight if the edge (node1, node1) exist. In case
      * there is no such edge return -1.
      *
-     * @param node1
-     * @param node2
-     * @return run time:O(1).
+     * @param node1,node2 - the nodes we want their edge.
+     * @return -the number of node1,node2 edge.
+     * run time:O(1).
      */
     @Override
     public double getEdge(int node1, int node2) {
@@ -379,7 +378,8 @@ public class WGraph_DS implements weighted_graph, Serializable {
      * add a new node to the graph with the given key.
      * if there is already a node with such a key -> no action should be performed.
      *
-     * @param key run time:O(1).
+     * @param key - the key of the node we add.
+     * run time:O(1).
      */
     @Override
     public void addNode(int key) {
@@ -449,8 +449,9 @@ public class WGraph_DS implements weighted_graph, Serializable {
      * and removes all edges which starts or ends at this node.
      * do this by for each loop that acts on this node and removes the edges between its neighbors.
      *
-     * @param key run time: O(n), |V|=n, as all the edges should be removed.
-     * @return the data of the removed node (null if none).
+     * @param key - the key of the remove node.
+     *run time: O(n), |V|=n, as all the edges should be removed.
+     * @return - the data of the removed node (null if none).
      */
     @Override
     public node_info removeNode(int key) {
@@ -476,8 +477,8 @@ public class WGraph_DS implements weighted_graph, Serializable {
     /**
      * Delete the edge between two nodes.
      *
-     * @param node1
-     * @param node2 run time:O(1).
+     * @param node1,node2 - the nodes we are remove their edge.
+     * run time:O(1).
      */
     @Override
     public void removeEdge(int node1, int node2) {
@@ -496,7 +497,8 @@ public class WGraph_DS implements weighted_graph, Serializable {
     /**
      * return the number of vertices (nodes) in the graph.
      *
-     * @return run time:O(1).
+     * @return -the num of nodes.
+     * run time:O(1).
      */
     @Override
     public int nodeSize() {
@@ -506,7 +508,8 @@ public class WGraph_DS implements weighted_graph, Serializable {
     /**
      * return the number of edges (undirectional graph).
      *
-     * @return run time:O(1).
+     * @return - the num of edges.
+     * run time:O(1).
      */
     @Override
     public int edgeSize() {
@@ -516,7 +519,7 @@ public class WGraph_DS implements weighted_graph, Serializable {
     /**
      * return the Mode Count - for testing changes in the graph.
      *
-     * @return
+     * @return - the num of changes.
      */
     @Override
     public int getMC() {
@@ -528,7 +531,7 @@ public class WGraph_DS implements weighted_graph, Serializable {
      * and inside asked if its the same node in both graph with
      * Node equals function.
      *
-     * @param obj
+     * @param obj - the graph we checks if it is equal to our graph.
      * @return
      */
     @Override
@@ -555,7 +558,7 @@ public class WGraph_DS implements weighted_graph, Serializable {
     /**
      * toString function that string each node with his neighbor.
      *
-     * @return
+     * @return - string of the graph.
      */
     @Override
     public String toString() {

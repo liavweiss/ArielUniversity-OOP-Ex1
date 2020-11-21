@@ -14,8 +14,7 @@ class WGraph_AlgoTest {
         weighted_graph g0 = Wgraph();
         weighted_graph_algorithms ag0 = new WGraph_Algo();
         ag0.init(g0);
-        weighted_graph g1 = new WGraph_DS();
-        g1=ag0.copy();
+        weighted_graph g1 = ag0.copy();
         g1.removeNode(0);
         assertFalse(g0.equals(g1));
     }

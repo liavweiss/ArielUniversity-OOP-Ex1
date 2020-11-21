@@ -31,8 +31,7 @@ public class WGraph_Algo implements weighted_graph_algorithms, Serializable {
 
     /**
      * Init the graph on which this set of algorithms will operate .
-     *
-     * @param g
+     * @param g - do the algorithm on this graph.
      */
     @Override
     public void init(weighted_graph g) {
@@ -40,9 +39,7 @@ public class WGraph_Algo implements weighted_graph_algorithms, Serializable {
     }
 
     /**
-     * Return the underlying graph of which this class works.
-     *
-     * @return
+     * @return - Return the underlying graph of which this class works.
      */
     @Override
     public weighted_graph getGraph() {
@@ -52,8 +49,7 @@ public class WGraph_Algo implements weighted_graph_algorithms, Serializable {
     /**
      * deep copy constructor.
      * Implemented by a copy function in Node and WGraph_DS classes.
-     *
-     * @return
+     * @return - the copy graph.
      */
     @Override
     public weighted_graph copy() {
@@ -66,7 +62,7 @@ public class WGraph_Algo implements weighted_graph_algorithms, Serializable {
      * Do it by checking if BFS function return the number of nodes in this graph.
      * (An explanation of BFS is given in the function itself).
      *
-     * @return
+     * @return - if it is connected or not.
      */
     @Override
     public boolean isConnected() {
@@ -88,7 +84,7 @@ public class WGraph_Algo implements weighted_graph_algorithms, Serializable {
      *
      * @param src  - start node
      * @param dest - end (target) node
-     * @return
+     * @return - the number of the path.
      */
     @Override
     public double shortestPathDist(int src, int dest) {
@@ -115,7 +111,7 @@ public class WGraph_Algo implements weighted_graph_algorithms, Serializable {
      *
      * @param src  - start node
      * @param dest - end (target) node
-     * @return
+     * @return - the list of the path.
      */
     @Override
     public List<node_info> shortestPath(int src, int dest) {
@@ -201,7 +197,7 @@ public class WGraph_Algo implements weighted_graph_algorithms, Serializable {
      * do this with equals function on WGraph_DS class.
      *
      * @param obj
-     * @return
+     * @return - if they equals.
      */
     @Override
     public boolean equals(Object obj) {
@@ -218,7 +214,7 @@ public class WGraph_Algo implements weighted_graph_algorithms, Serializable {
      * and if its meta_data is "white" it will change the meta_data to "black" and do counter ++
      * Finally we reset the meta_data and return the counter.
      *
-     * @param graph
+     * @param graph - the graph that doing on him the BFS algorithm.
      * @return run time:O(V+E) v=vertexes , E=edges
      */
     private int BFS(weighted_graph graph) {
@@ -258,7 +254,7 @@ public class WGraph_Algo implements weighted_graph_algorithms, Serializable {
      * Then we will change the info of the father to "black".
      * And finally we will return false.
      *
-     * @param src,dest
+     * @param src,dest - the first node and the last node in the path.
      * @return run time:O(V+E) v=vertexes , E=edges
      */
     private boolean Dij(node_info src, node_info dest) {
@@ -297,7 +293,7 @@ public class WGraph_Algo implements weighted_graph_algorithms, Serializable {
     /**
      * This function initializes the fields:tag,PreviousKey,Place.
      *
-     * @param W_graph
+     * @param W_graph - the graph that we wont to reset him to his first mode.
      */
     private void resetNodes(weighted_graph W_graph) {
         for (node_info node : W_graph.getV()) {
