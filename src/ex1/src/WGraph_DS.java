@@ -1,12 +1,12 @@
+package ex1.src;
+
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 
 
-
-/**
- * This class implements the interface that represents an undirectional weighted graph.
+/** * This class implements the interface that represents an undirectional weighted graph.
  * It support a large number of nodes (over 10^6, with average degree of 10).
  *
  * @author liav.weiss

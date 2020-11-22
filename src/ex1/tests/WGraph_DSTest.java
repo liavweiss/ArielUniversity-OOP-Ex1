@@ -1,8 +1,12 @@
+package ex1.tests;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import ex1.src.*;
 
 import java.util.Collection;
 import java.util.Random;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class WGraph_DSTest {
     private static Random _rnd = null;
